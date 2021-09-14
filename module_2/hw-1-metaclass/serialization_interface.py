@@ -52,10 +52,10 @@ file_bin_name = "data.bin"
 file_json_name = "data.json"
 data_for_save = "Hello world!"
 
-test_obj_bin = SerializationBin(file_bin_name, data_for_save)
-test_obj_json = SerializationJson(file_json_name, data_for_save)
-test_obj_bin.write_file()
-test_obj_json.write_file()
+# test_obj_bin = SerializationBin(file_bin_name, data_for_save)
+# test_obj_json = SerializationJson(file_json_name, data_for_save)
+# test_obj_bin.write_file()
+# test_obj_json.write_file()
 
 if __name__ == "__main__":
     pass
