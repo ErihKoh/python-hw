@@ -2,12 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/hw-10-classes" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/hw-12-save-to-file" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/hw-7-package" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/hw-8-birthday" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/hw-9-console-bot" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/hw6-sort-files" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/python-hw-sort" vcs="Git" />
   </component>
 </project>
