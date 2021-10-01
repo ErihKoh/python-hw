@@ -1,3 +1,4 @@
+import json
 from abc import abstractmethod, ABC
 from collections import UserDict
 import re
@@ -53,22 +54,42 @@ class AddressBook(Assistant):
 #         super().__init__(record)
 
 
-class Record:
-
-    def __init__(self, name):
-        self.name = name
-
-    def create_record(self):
-        record = {}
-        record['name'] = self.name
-        print(record)
-
-
-
-
-# class Name:
+# class Record:
+#
 #     def __init__(self, name):
-#         self.name = name
+#         self._name = name
+#
+#     record = {}
+#
+#     @property
+#     def value(self):
+#         return self._name
+#
+#     @value.setter
+#     def value(self, names):
+#         self._name = names
+#
+#     def __str__(self):
+#         return f"{self.__class__.__name__}: {self._name}"
+
+
+
+class Name:
+    def __init__(self, name):
+        self._name = name
+
+    @property
+    def value(self):
+        return self._name
+
+    @value.setter
+    def value(self, name):
+        self._name = name
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: {self._name}"
+
+
 #
 #
 # class Phone:
@@ -92,7 +113,14 @@ if __name__ == "__main__":
     # ab.add_record('address')
     # ab.add_record('phones')
 
-    rec = Record('Yurii')
+    file = 'D:\Admin\GitHub\Python\python-hw\module_2\hw-2\smartbot\jfile.json'
+
+    rec = Record(Name('Yurii'))
     rec.create_record()
 
+    name = Name('Yurii').value
 
+    print(name)
+
+    # with open(file, 'w') as fh:
+    #     json.dump(rec, fh)
