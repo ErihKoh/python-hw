@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c1c97042-1a00-4f43-aee5-0b6bfa8d7191" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/Pipfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/Pipfile.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/address_book.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/note.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-3/smartbot/sort_file.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/module_2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/module_2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="c1c97042-1a00-4f43-aee5-0b6bfa8d7191" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,9 +20,15 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Admin\GitHub\Python\python-hw\module_2\hw-3" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -85,6 +79,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
