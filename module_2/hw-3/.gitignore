@@ -6,4 +6,5 @@ __pycache__
 env/
 *.bin
 *.json
-/files/
+/smartbot/files/
+/.idea/
