@@ -1,14 +1,14 @@
 import sys
 from pathlib import Path
 import shutil
-from concurrent.futures import ThreadPoolExecutor
+from threading import Thread
+
 import scan
 from normalize import normalize
 
 
 def handle_image(file: Path, root_folder: Path, dist: str):
     target_folder = root_folder / dist
-    print(target_folder)
     target_folder.mkdir(exist_ok=True)
     ext = Path(file).suffix
     new_name = normalize(file.name.replace(ext, "")) + ext
@@ -70,7 +70,9 @@ def handle_folder(folder: Path):
 
 
 def main(folder):
-    scan.scan(folder)
+    thr = Thread(target=scan.scan, args=(folder,))
+    thr.start()
+    thr.join()
 
     for file in scan.IMAGE:
         handle_image(file, folder, "images")
@@ -100,4 +102,4 @@ if __name__ == "__main__":
 
     sort_folder = Path(scan_path)
     print(sort_folder.resolve())
-    # main(sort_folder.resolve())
+    main(sort_folder.resolve())
