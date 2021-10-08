@@ -5,7 +5,6 @@ import scan
 from normalize import normalize
 
 
-
 def handle_image(file: Path, root_folder: Path, dist: str):
     target_folder = root_folder / dist
     target_folder.mkdir(exist_ok=True)
@@ -27,8 +26,8 @@ def handle_audio(file: Path, root_folder: Path, dist: str):
     target_folder.mkdir(exist_ok=True)
     ext = Path(file).suffix
     new_name = normalize(file.name.replace(ext, "")) + ext
-    file.replace(target_folder / new_name)        
-     
+    file.replace(target_folder / new_name)
+
 
 def handle_doc(file: Path, root_folder: Path, dist: str):
     target_folder = root_folder / dist
@@ -58,14 +57,15 @@ def handle_archive(file: Path, root_folder: Path, dist):
     except shutil.ReadError:
         archive_folder.rmdir()
         return
-    file.unlink()    
+    file.unlink()
 
 
 def handle_folder(folder: Path):
     try:
         folder.rmdir()
     except OSError:
-        pass    
+        pass
+
 
 def main(folder):
     scan.scan(folder)
@@ -77,16 +77,16 @@ def main(folder):
         handle_video(file, folder, "video")
 
     for file in scan.AUDIO:
-        handle_audio(file, folder, "audio")   
+        handle_audio(file, folder, "audio")
 
     for file in scan.DOC:
-        handle_doc(file, folder, "documents")  
+        handle_doc(file, folder, "documents")
 
     for file in scan.OTHER:
-        handle_other(file, folder, "other") 
+        handle_other(file, folder, "other")
 
     for file in scan.ARCH:
-        handle_archive(file, folder, "archives")    
+        handle_archive(file, folder, "archives")
 
     for item in scan.FOLDERS:
         handle_folder(item)

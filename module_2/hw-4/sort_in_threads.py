@@ -76,7 +76,7 @@ def handle_folder(folder: Path):
         pass
 
 
-workers = scan.REGISTERED_EXTENSIONS.keys()
+workers = len(scan.REGISTERED_EXTENSIONS.keys())
 
 
 def main(folder):
@@ -103,3 +103,4 @@ if __name__ == "__main__":
     sort_folder = Path(scan_path)
 
     main(sort_folder.resolve())
+
