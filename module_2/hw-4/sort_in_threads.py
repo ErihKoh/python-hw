@@ -31,7 +31,7 @@ def handle_folder(folder: Path):
     try:
         folder.rmdir()
     except OSError:
-        print("System error")
+        pass
 
 
 workers = len(scan.REGISTERED_EXTENSIONS.keys())
