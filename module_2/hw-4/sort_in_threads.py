@@ -38,9 +38,9 @@ workers = len(scan.REGISTERED_EXTENSIONS.keys())
 
 
 def main(folder):
-    thr = Thread(target=scan.scan, args=(folder,))
-    thr.start()
-    thr.join()
+    scan.scan(folder)
+    for thr in scan.threads:
+        thr.join()
 
     with ThreadPoolExecutor(max_workers=workers) as executor:
         executor.submit(handle_files, folder, scan.IMAGE, 'images')

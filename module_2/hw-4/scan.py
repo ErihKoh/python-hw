@@ -12,6 +12,8 @@ FOLDERS = []
 UNKNOWN = set()
 EXTENSION = set()
 
+threads = []
+
 REGISTERED_EXTENSIONS = {
     "IMAGE": IMAGE,
     "VIDEO": VIDEO,
@@ -31,7 +33,8 @@ def scan(folder: Path):
         if item.is_dir():
             if item.name not in ("images", "video", "audio", "documents", "other", "archives"):
                 FOLDERS.append(item)
-                Thread(target=scan, args=(item,)).start()
+                thread_dir = Thread(target=scan, args=(item,)).start()
+                threads.append(thread_dir)
             continue
         extension = get_extension(item.name)
         new_name = folder / item.name
