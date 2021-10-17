@@ -33,8 +33,9 @@ def scan(folder: Path):
         if item.is_dir():
             if item.name not in ("images", "video", "audio", "documents", "other", "archives"):
                 FOLDERS.append(item)
-                thread_dir = Thread(target=scan, args=(item,)).start()
+                thread_dir = Thread(target=scan, args=(item,))
                 threads.append(thread_dir)
+                thread_dir.start()
             continue
         extension = get_extension(item.name)
         new_name = folder / item.name
@@ -63,6 +64,10 @@ def scan(folder: Path):
                     current_container = REGISTERED_EXTENSIONS["ARCH"]
                     EXTENSION.add(extension)
                     current_container.append(new_name)
+                else:
+                    current_container = REGISTERED_EXTENSIONS["OTHER"]
+                    EXTENSION.add(extension)
+                    current_container.append(new_name)
             except KeyError:
                 UNKNOWN.add(extension)
                 OTHER.append(new_name)
@@ -75,8 +80,3 @@ if __name__ == "__main__":
     search_folder = Path(scan_path)
 
     scan(search_folder)
-
-
-
-
-
