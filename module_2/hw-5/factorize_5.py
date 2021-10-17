@@ -1,4 +1,4 @@
-import multiprocessing
+from concurrent.futures import ProcessPoolExecutor
 import time
 
 
@@ -7,8 +7,8 @@ def create_dev(number):
 
 
 def factorize(*numbers):
-    with multiprocessing.Pool(2) as pool:
-        results = pool.map(create_dev, numbers)
+    with ProcessPoolExecutor(max_workers=2) as executor:
+        results = executor.map(create_dev, numbers)
     return results
 
 
@@ -17,10 +17,10 @@ if __name__ == '__main__':
 
     a, b, c, d = factorize(128, 255, 99999, 10651060)
 
-    print(a)
-    print(b)
-    print(c)
-    print(d)
+    # print(a)
+    # print(b)
+    # print(c)
+    # print(d)
 
     finish = time.perf_counter()
 
