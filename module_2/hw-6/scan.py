@@ -25,13 +25,12 @@ def get_extension(file_name):
     return Path(file_name).suffix[1:].upper()
 
 
-
-def scan(folder: Path):
+async def scan(folder: Path):
     for item in folder.iterdir():
         if item.is_dir():
             if item.name not in ("images", "video", "audio", "documents", "other", "archives"):
                 FOLDERS.append(item)
-                scan(item)
+                await scan(item)
             continue
         extension = get_extension(item.name)
         new_name = folder / item.name
@@ -50,11 +49,11 @@ def scan(folder: Path):
                 elif extension in ("MP3"):
                     current_container = REGISTERED_EXTENSIONS["AUDIO"]
                     EXTENSION.add(extension)
-                    current_container.append(new_name)  
+                    current_container.append(new_name)
                 elif extension in ("DOC", "DOCX", "TXT", "PDF"):
                     current_container = REGISTERED_EXTENSIONS["DOC"]
                     EXTENSION.add(extension)
-                    current_container.append(new_name) 
+                    current_container.append(new_name)
                 elif extension in ("ZIP", "RAR"):
                     current_container = REGISTERED_EXTENSIONS["ARCH"]
                     EXTENSION.add(extension)
@@ -62,10 +61,6 @@ def scan(folder: Path):
             except KeyError:
                 UNKNOWN.add(extension)
                 OTHER.append(new_name)
-                             
-        
-                   
-                
 
 
 if __name__ == "__main__":
@@ -74,4 +69,3 @@ if __name__ == "__main__":
 
     search_folder = Path(scan_path)
     scan(search_folder)
-   
