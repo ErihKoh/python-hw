@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 
 IMAGE = []
@@ -25,9 +24,10 @@ def get_extension(file_name):
     return Path(file_name).suffix[1:].upper()
 
 
-async def scan(folder: Path):
-    for item in folder.iterdir():
-        if item.is_dir():
+async def scan(folder):
+    async for item in folder.iterdir():
+        is_folder = await item.is_dir()
+        if is_folder:
             if item.name not in ("images", "video", "audio", "documents", "other", "archives"):
                 FOLDERS.append(item)
                 await scan(item)
@@ -63,9 +63,3 @@ async def scan(folder: Path):
                 OTHER.append(new_name)
 
 
-if __name__ == "__main__":
-    scan_path = sys.argv[1]
-    print(f"Start in folder {scan_path}")
-
-    search_folder = Path(scan_path)
-    scan(search_folder)

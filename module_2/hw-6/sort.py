@@ -2,11 +2,13 @@ import sys
 from pathlib import Path
 import shutil
 import asyncio
+import aiopath
+
 import scan
 from normalize import normalize
 
 
-async def handle_files(root_folder: Path, folder_for_sort, dist: str):
+async def handle_files(root_folder, folder_for_sort, dist: str):
     for file in folder_for_sort:
         target_folder = root_folder / dist
         target_folder.mkdir(exist_ok=True)
@@ -14,27 +16,30 @@ async def handle_files(root_folder: Path, folder_for_sort, dist: str):
         new_name = normalize(file.name.replace(ext, "")) + ext
 
         if dist != 'archives':
-            file.replace(target_folder / new_name)
+            await file.replace(target_folder / new_name)
         else:
             archive_folder = target_folder / new_name
-            archive_folder.mkdir(exist_ok=True)
+            async_folder = aiopath.AsyncPath(archive_folder)
+            await async_folder.mkdir(exist_ok=True)
             try:
-                shutil.unpack_archive(str(file.resolve()), str(archive_folder.resolve()))
+                async_file = aiopath.AsyncPath(file)
+                shutil.unpack_archive(str(async_file), str(async_folder))
             except shutil.ReadError:
                 archive_folder.rmdir()
                 return
-            file.unlink()
+            await file.unlink()
 
 
-async def handle_folder(folder: Path):
+async def handle_folder(folder):
     try:
-        folder.rmdir()
+        await folder.rmdir()
     except OSError:
         pass
 
 
 async def main(folder):
-    await scan.scan(folder)
+    path = aiopath.AsyncPath(folder)
+    await scan.scan(path)
 
     await handle_files(folder, scan.IMAGE, 'images')
     await handle_files(folder, scan.VIDEO, 'video')
