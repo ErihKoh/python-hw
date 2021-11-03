@@ -15,7 +15,9 @@ def send_to_server():
         listen_thread = threading.Thread(target=listen_server, args=(sock,))
         listen_thread.start()
         while True:
-            sock.send(input().encode('utf-8'))
+            input_data = input(": ")
+
+            sock.send(input_data.encode('utf-8'))
 
 
 if __name__ == '__main__':
