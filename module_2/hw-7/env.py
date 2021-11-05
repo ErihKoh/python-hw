@@ -1,2 +1,2 @@
-HOST = "192.168.1.106"
+HOST = "localhost"
 PORT = 1010

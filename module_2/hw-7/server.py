@@ -3,12 +3,12 @@ import threading
 from env import HOST, PORT
 
 
-def send_all(data, users) -> None:
+def send_all(data, users):
     for user in users:
         user.send(data)
 
 
-def listen_user(user, users) -> None:
+def listen_user(user, users):
     while True:
         data = user.recv(1024)
         print(f"User sent {data}")
@@ -16,7 +16,7 @@ def listen_user(user, users) -> None:
         send_all(data, users)
 
 
-def start_server() -> None:
+def start_server():
     users = []
     with socket.socket() as sock:
         sock.bind((HOST, PORT))
