@@ -1,5 +1,4 @@
 import sys
-from pathlib import Path
 import shutil
 import asyncio
 from aiopath import AsyncPath
@@ -11,8 +10,9 @@ from normalize import normalize
 async def handle_files(root_folder, folder_for_sort, dist: str):
     for file in folder_for_sort:
         target_folder = root_folder / dist
-        target_folder.mkdir(exist_ok=True)
-        ext = Path(file).suffix
+        async_folder = AsyncPath(target_folder)
+        await async_folder.mkdir(exist_ok=True)
+        ext = AsyncPath(file).suffix
         new_name = normalize(file.name.replace(ext, "")) + ext
 
         if dist != 'archives':
@@ -56,6 +56,5 @@ if __name__ == "__main__":
     scan_path = sys.argv[1]
     print(f"Start in folder {scan_path}")
 
-    sort_folder = Path(scan_path)
-    print(sort_folder.resolve())
-    asyncio.run(main(sort_folder.resolve()))
+    sort_folder = AsyncPath(scan_path)
+    asyncio.run(main(sort_folder))
