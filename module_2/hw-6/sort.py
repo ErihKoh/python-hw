@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import shutil
 import asyncio
-import aiopath
+from aiopath import AsyncPath
 
 import scan
 from normalize import normalize
@@ -19,10 +19,10 @@ async def handle_files(root_folder, folder_for_sort, dist: str):
             await file.replace(target_folder / new_name)
         else:
             archive_folder = target_folder / new_name
-            async_folder = aiopath.AsyncPath(archive_folder)
+            async_folder = AsyncPath(archive_folder)
             await async_folder.mkdir(exist_ok=True)
             try:
-                async_file = aiopath.AsyncPath(file)
+                async_file = AsyncPath(file)
                 shutil.unpack_archive(str(async_file), str(async_folder))
             except shutil.ReadError:
                 archive_folder.rmdir()
@@ -38,8 +38,8 @@ async def handle_folder(folder):
 
 
 async def main(folder):
-    path = aiopath.AsyncPath(folder)
-    await scan.scan(path)
+    async_path = AsyncPath(folder)
+    await scan.scan(async_path)
 
     await handle_files(folder, scan.IMAGE, 'images')
     await handle_files(folder, scan.VIDEO, 'video')

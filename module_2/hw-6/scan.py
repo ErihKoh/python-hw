@@ -1,4 +1,4 @@
-from pathlib import Path
+from aiopath import AsyncPath
 
 IMAGE = []
 VIDEO = []
@@ -21,7 +21,7 @@ REGISTERED_EXTENSIONS = {
 
 
 def get_extension(file_name):
-    return Path(file_name).suffix[1:].upper()
+    return AsyncPath(file_name).suffix[1:].upper()
 
 
 async def scan(folder):
@@ -46,7 +46,7 @@ async def scan(folder):
                     current_container = REGISTERED_EXTENSIONS["VIDEO"]
                     EXTENSION.add(extension)
                     current_container.append(new_name)
-                elif extension in ("MP3"):
+                elif extension in ("MP3",):
                     current_container = REGISTERED_EXTENSIONS["AUDIO"]
                     EXTENSION.add(extension)
                     current_container.append(new_name)
