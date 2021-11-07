@@ -37,29 +37,26 @@ async def scan(folder):
         if not extension:
             OTHER.append(new_name)
         else:
-            try:
-                if extension in ("JPEG", "JPG", "SVG", "PNG"):
-                    current_container = REGISTERED_EXTENSIONS["IMAGE"]
-                    EXTENSION.add(extension)
-                    current_container.append(new_name)
-                elif extension in ("MP4", "MPEG", "WMV", "MOV", "MKV", "3gp", "AVI"):
-                    current_container = REGISTERED_EXTENSIONS["VIDEO"]
-                    EXTENSION.add(extension)
-                    current_container.append(new_name)
-                elif extension in ("MP3",):
-                    current_container = REGISTERED_EXTENSIONS["AUDIO"]
-                    EXTENSION.add(extension)
-                    current_container.append(new_name)
-                elif extension in ("DOC", "DOCX", "TXT", "PDF"):
-                    current_container = REGISTERED_EXTENSIONS["DOC"]
-                    EXTENSION.add(extension)
-                    current_container.append(new_name)
-                elif extension in ("ZIP", "RAR"):
-                    current_container = REGISTERED_EXTENSIONS["ARCH"]
-                    EXTENSION.add(extension)
-                    current_container.append(new_name)
-            except KeyError:
+            if extension in ("JPEG", "JPG", "SVG", "PNG"):
+                current_container = REGISTERED_EXTENSIONS.get("IMAGE")
+                EXTENSION.add(extension)
+                current_container.append(new_name)
+            elif extension in ("MP4", "MPEG", "WMV", "MOV", "MKV", "3gp", "AVI"):
+                current_container = REGISTERED_EXTENSIONS.get("VIDEO")
+                EXTENSION.add(extension)
+                current_container.append(new_name)
+            elif extension in ("MP3",):
+                current_container = REGISTERED_EXTENSIONS.get("AUDIO")
+                EXTENSION.add(extension)
+                current_container.append(new_name)
+            elif extension in ("DOC", "DOCX", "TXT", "PDF"):
+                current_container = REGISTERED_EXTENSIONS.get("DOC")
+                EXTENSION.add(extension)
+                current_container.append(new_name)
+            elif extension in ("ZIP", "RAR"):
+                current_container = REGISTERED_EXTENSIONS.get("ARCH")
+                EXTENSION.add(extension)
+                current_container.append(new_name)
+            else:
                 UNKNOWN.add(extension)
                 OTHER.append(new_name)
-
-
