@@ -42,17 +42,23 @@ def creating_tbl(conn, db):
 
         course_and_grade_tbl = """CREATE TABLE courses
                                 (id INT NOT NULL,
+                                course_name VARCHAR(128)
                                 teacher INT NOT NULL,
-                                student INT NOT NULL,
                                 CONSTRAINT fk_tch_cr FOREIGN KEY (teacher) REFERENCES teachers (id),
-                                CONSTRAINT fk_std_cr FOREIGN KEY (student) REFERENCES students (id),
                                 grade INT NOT NULL,
                                 date DATE NOT NULL)"""
+
+        courses_and_students = """CREATE TABLE std_crs
+                                  (student_id INT NOT NULL,
+                                  courses_id INT NOT NULL,
+                                  CONSTRAINT fk_std_cr_std FOREIGN KEY (students) REFERENCES teachers (id),
+                                  CONSTRAINT fk_std_cr_cr FOREIGN KEY (courses) REFERENCES teachers (id))"""
 
         cursor.execute(group_tbl)
         cursor.execute(student_tbl)
         cursor.execute(teacher_tbl)
         cursor.execute(course_and_grade_tbl)
+        cursor.execute(courses_and_students)
         connection.commit()
         print("Successfully created table")
 
