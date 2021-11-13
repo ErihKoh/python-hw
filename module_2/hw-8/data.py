@@ -10,7 +10,7 @@ std_lst = [(1, 'Allen', 1), (2, 'Atkinson', 1), (3, 'Adams', 1), (4, 'Armstrong'
 
 group_lst = [(1, 'Group 1'), (2, 'Group 2'), (3, 'Group 3')]
 
-teacher_lst = [(1, ' Darwin'), (2, 'Curie'), (3, 'Plank')]
+teacher_lst = [(1, 'Darwin'), (2, 'Curie'), (3, 'Plank')]
 
 courses_lst = [(1, 'Computer science', 3, 10, 6, '2020-12-18'), (2, 'Physics', 2, 3, 7, '2020-12-16'),
                (3, 'Math', 3, 13, 6, '2020-12-2'), (4, 'Computer science', 3, 27, 9, '2020-12-11'),
