@@ -23,12 +23,16 @@ def select_in_db(conn, db, query_str):
 
 if __name__ == '__main__':
     name_db = 'courses'
-
-    query = ''
+    print('Средний балл, который преподаватель ставит студенту.')
+    query = """SELECT ROUND(AVG(grade), 2)
+        FROM courses
+        INNER JOIN students ON students.id = courses.student
+        INNER JOIN teachers ON teachers.id = courses.teacher
+        WHERE students.last_name = 'Edwards' AND teachers.laST_name = 'Curie'"""
     select_in_db(connection_to_db, name_db, query)
 
     #  5 студентов с наибольшим средним баллом по всем предметам.
-    """SELECT avg(grade) as avg_grade, last_name
+    """SELECT ROUND(avg(grade), 2) as avg_grade, last_name
         FROM courses, students
         WHERE student = students.id
         GROUP BY last_name
@@ -36,7 +40,7 @@ if __name__ == '__main__':
         LIMIT 5"""
 
     # 1 студент с наивысшим средним баллом по одному предмету.
-    """SELECT avg(grade) as avg_grade, last_name
+    """SELECT ROUND(avg(grade), 2) as avg_grade, last_name
         FROM courses, students 
         WHERE course_name = 'Math' AND student = students.id
         GROUP BY student, last_name
@@ -55,7 +59,7 @@ if __name__ == '__main__':
 
     #   Средний балл в потоке.
 
-    """SELECT avg(grade)
+    """SELECT ROUND(avg(grade), 2)
         FROM courses"""
 
     #   Какие курсы читает преподаватель.
