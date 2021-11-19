@@ -1,0 +1,3 @@
+[console_scripts]
+smartbot = smartbot.app:main
+
