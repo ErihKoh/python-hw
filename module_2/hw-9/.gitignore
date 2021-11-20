@@ -7,3 +7,4 @@ env/
 *.bin
 *.json
 build
+Pipfile.lock
