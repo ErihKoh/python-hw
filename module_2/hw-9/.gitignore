@@ -8,3 +8,4 @@ env/
 *.json
 build
 Pipfile.lock
+smartbot.egg-info
