@@ -1,8 +1,8 @@
 import logging
 
 from .address_book import add_contact, delete_contact, change_contact, find_contact, show_contacts, show_birthdays, \
-    dump_note, ADDRESS_BOOK_FILE, CONTACTS
-from .note import add_note, delete_note, change_note, find_note, show_notes, NOTE_FILE, NOTE
+    dump_note, CONTACTS
+from .note import add_note, delete_note, change_note, find_note, show_notes, NOTE
 from fuzzywuzzy import fuzz
 
 # Config logging
@@ -21,56 +21,46 @@ def handle_info(func):
     return inner
 
 
-def exit_handler():
+def exit_app():
     """Функция выхода из бота"""
-    dump_note(ADDRESS_BOOK_FILE, CONTACTS)
-    dump_note(NOTE_FILE, NOTE)
+    # dump_note(ADDRESS_BOOK_FILE, CONTACTS)
+    # dump_note(NOTE_FILE, NOTE)
     return
 
 
-def possible_cmd():
-    """Функция вывода сообщения если неверно указана команда"""
-    return f'К сожалению, команда не распознана. Вероятно, вы имели ввиду что-то из этого: {", ".join(psb_cmd)}\n' \
-           f"Попробуйте ввести команду еще раз."
-
-
-def unknown_cmd():
-    """Функция вывода сообщения если введена неизвестная команда"""
-    return f'К сожалению, команда не распознана.' \
-           f"Попробуйте ввести команду еще раз."
-
-
-COMMAND = {'add_contact': add_contact,
-           'delete_contact': delete_contact,
-           'change_contact': change_contact,
-           'find_contact': find_contact,
-           'show_contacts': show_contacts,
-           'show_birthdays': show_birthdays,
-           'add_note': add_note,
-           'delete_note': delete_note,
-           'change_note': change_note,
-           'find_note': find_note,
-           'show_notes': show_notes,
-           'exit': exit_handler}
-
-# Список вероятных команд
-psb_cmd = []
+COMMAND = {
+    'add_contact': add_contact,
+    'delete_contact': delete_contact,
+    'change_contact': change_contact,
+    'find_contact': find_contact,
+    'show_contacts': show_contacts,
+    'show_birthdays': show_birthdays,
+    'add_note': add_note,
+    'delete_note': delete_note,
+    'change_note': change_note,
+    'find_note': find_note,
+    'show_notes': show_notes,
+    'exit': exit_app
+}
 
 
 def command_analyzer(input_command):
     """Функция, которая занимается анализом введенных команд"""
+    psb_cmd = []
     for key, value in COMMAND.items():
         if fuzz.ratio(key, input_command) == 100:
-            return value
+            return value()
         elif 80 < fuzz.ratio(key, input_command) < 100:
             print(f"Похоже, вы имели ввиду команду: {key}")
-            return value
+            return value()
         elif 40 <= fuzz.ratio(key, input_command) <= 80:
             psb_cmd.append(key)
     if len(psb_cmd) > 0:
-        return possible_cmd
+        return f'К сожалению, команда не распознана. Вероятно, вы имели ввиду что-то из этого: {", ".join(psb_cmd)}\n \
+                 Попробуйте ввести команду еще раз.'
     else:
-        return unknown_cmd
+        return f'К сожалению, команда не распознана. \
+                 Попробуйте ввести команду еще раз.'
 
 
 def main():
@@ -78,10 +68,9 @@ def main():
     while True:
         user_input = input('Input your command: ')
         command = user_input.lower().strip()
-        handler = command_analyzer(command)
-        result = handler()
+        result = command_analyzer(command)
         if not result:
-            exit_handler()
+            exit_app()
             print('Bye')
             break
         print(result)

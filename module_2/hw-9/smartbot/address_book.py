@@ -4,14 +4,6 @@ import json
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# Пусть к файлу с контактами
-current_dir = Path.cwd()
-FILES = current_dir / 'files'
-FILES.mkdir(exist_ok=True)
-
-
-ADDRESS_BOOK_FILE = './files/address_book.json'
-
 
 def dump_note(path_file, new_data):
     """Функция записи данных в файл"""
@@ -31,53 +23,49 @@ def load_note(path_file):
 
 
 # Пусть к файлу с контактами
-CONTACTS = load_note(ADDRESS_BOOK_FILE)
+CONTACTS = []
 
 
-def sanitize_n_check_phone(phone):
-    # Функция принимает на вход телефон с кодом страны или без, удаляет из него лишние символы, проверяет на валидность.
-    # Если валиден - возвращает телефон в формате +380*********, иначе возвращает False
-    def sanitize_phone_number(phone):
-        # Убирает типичные лишние символы
-        new_phone = (
-            phone.strip()
-                .removeprefix("+")
-                .replace("(", "")
-                .replace(")", "")
-                .replace("-", "")
-                .replace(" ", "")
-        )
-        return new_phone
+def sanitize_phone_number(number_phone):
+    # Убирает лишние символы
+    new_phone = (
+        number_phone.strip()
+            .removeprefix("+")
+            .replace("(", "")
+            .replace(")", "")
+            .replace("-", "")
+            .replace(" ", "")
+    )
+    return new_phone
 
-    def check_phone_number(new_phone):
-        # Функция проверяет валидность "нормализированного" номера и возвращает его в стандарте +380, или возвращает
-        # False если невалиден
-        sanitized_phone = sanitize_phone_number(phone)
-        for symbol in sanitized_phone:  # должен содержать только цифры
-            if symbol not in "0123456789":
-                return False
-        if sanitized_phone[0:3] == "380" and len(sanitized_phone) == 12:
-            return "+" + str(sanitized_phone)  # наинаеться с 380 и имеет длинну 12
-        elif sanitized_phone[0:1] == "0" and len(sanitized_phone) == 10:
-            return "+38" + str(sanitized_phone)  # начинаться с 0 и имеет длинну 10
-        else:
+
+def check_phone_number(number_phone):
+    # Функция проверяет валидность "нормализированного" номера и возвращает его в стандарте +380, или возвращает
+    # False если невалиден
+    sanitized_phone = sanitize_phone_number(number_phone)
+    for symbol in sanitized_phone:  # должен содержать только цифры
+        if symbol not in "0123456789":
             return False
-
-    return check_phone_number(sanitize_phone_number(phone))
+    if sanitized_phone[0:3] == "380" and len(sanitized_phone) == 12:
+        return "+" + str(sanitized_phone)  # начинаться с 380 и имеет длину 12
+    elif sanitized_phone[0:1] == "0" and len(sanitized_phone) == 10:
+        return "+38" + str(sanitized_phone)  # начинаться с 0 и имеет длину 10
+    else:
+        return False
 
 
 def input_phone():
     # Дает возможность ввести телефон и проверяет его валидность.
     # Если невалиден - ввод еще раз, Если валиден - возвращает валидный телефон
     phone = input("Введите телефон.\n>>> ")
-    if not sanitize_n_check_phone(phone):
+    if not check_phone_number(phone):
         print("Вы ввели некоректный телефон.\nПопробуйте еще раз ;)")
         return input_phone()
     else:
-        return sanitize_n_check_phone(phone)
+        return check_phone_number(phone)
 
 
-def add_some_phones():
+def add_other_phones():
     # Возвращает список от одного и более валидных телефонов.
     # После коректного введения 1 телефона спросит, хочешь ли добавить еще.
     # И, если ты уже ввел хотя бы 1 валидный номер, а потом захотел ввести еще, но ввел неправильно или передумал
@@ -90,26 +78,26 @@ def add_some_phones():
         if answer == "":
             break
         else:
-            if sanitize_n_check_phone(answer):
-                phones_to_add.append(sanitize_n_check_phone(answer))
+            if check_phone_number(answer):
+                phones_to_add.append(check_phone_number(answer))
             else:
                 print("Вы ввели невалидный телефон.\nПопробуйте еще раз.")
     return phones_to_add
 
 
-def wanna_enter_address():
-    # Функция обработки адресса
-    # Просто дает возможность вводить или не вводить адресс. Проверки нет.
+def enter_address():
+    # Функция обработки адреса
+    # Просто дает возможность вводить или не вводить адрес. Проверки нет.
 
-    answer = input("Введите адрес контакта и нажмите 'Enter'.\n"
+    address = input("Введите адрес контакта и нажмите 'Enter'.\n"
                    "Что бы пропустить - нажмите 'Enter'.\n>>> ")
-    if answer == "":
+    if address == "":
         return
     else:
-        return answer
+        return address
 
 
-def is_email_correct(email):
+def email_is_correct(email):
     # ФУНКЦИИ ДЛЯ ОБРАБОТКИ ЭМЕЙЛА
     # 1. Дать возможность пропустить ввод емейла.
     # 2. Проверка введенного емейла ( )
@@ -129,24 +117,24 @@ def is_email_correct(email):
     # 3.2 После точки должно быть минимум 2 символа
 
 
-def wanna_enter_email():
-    # Функция ничего не принимает, возвращает либо валидное значение емейла, либо None
-    # Функция дает возможность ввести эмейл или перейти дальше. В случае ошибки так же предложит пропустить или
+def enter_email():
+    # Функция ничего не принимает, возвращает либо валидное значение email, либо None
+    # Функция дает возможность ввести email или перейти дальше. В случае ошибки так же предложит пропустить или
     # попробовать заново.
 
-    answer = input("Введите Email человека и нажмите 'Enter'.\n"
+    email = input("Введите Email человека и нажмите 'Enter'.\n"
                    "Чтобы пропустить - нажмите 'Enter'.\n>>> ")
-    if answer == "":
+    if email == "":
         return None
     else:
-        if is_email_correct(answer):
-            return is_email_correct(answer)
+        if email_is_correct(email):
+            return email_is_correct(email)
         else:
             print("Вы ввели недействительный email.\nПопробуйте еще раз.")
-            return wanna_enter_email()
+            return enter_email()
 
 
-def is_date_correct(date):
+def birthday_is_correct(date):
     # ФУНКЦИИ ДЛЯ ОБРАБОТКИ ДАТЫ РОЖДЕНИЯ
     # 1. Дать возможность вводить или не вводить день рождения
     # 2. Проверка на соответствие заданному формату даты
@@ -157,37 +145,37 @@ def is_date_correct(date):
     return False
 
 
-def wanna_enter_birthday():
-    answer = input(
+def enter_birthday():
+    birthday = input(
         "Введите день рождения человека в формате '01.09.1986' и нажмите 'Enter'.\n"
         "Чтобы пропустить - нажмите 'Enter'.\n>>> ")
-    if answer == "":
+    if birthday == "":
         return None
     else:
-        if is_date_correct(answer):
-            return is_date_correct(answer)
+        if birthday_is_correct(birthday):
+            return birthday_is_correct(birthday)
         else:
             print("Вы ввели недействительную дату.\nПопробуйте еще раз.")
-            return wanna_enter_birthday()
+            return enter_birthday()
 
 
 def add_contact() -> str:
     # Собранная функция добавления контакта
     # Не принимает аргументов, возвращает словарь с проверенными значениями имени, телефона (телефонов),
     # и по желанию - почта и день рождения
-    result = dict()
-    result["name"] = input("Введите имя контакта: ")
-    result["birthday"] = wanna_enter_birthday()
-    result["address"] = wanna_enter_address()
-    result["phones"] = add_some_phones()
-    result["email"] = wanna_enter_email()
-    CONTACTS.append(result)
+    contact = dict()
+    contact["name"] = input("Введите имя контакта: ")
+    contact["birthday"] = enter_birthday()
+    contact["address"] = enter_address()
+    contact["phones"] = add_other_phones()
+    contact["email"] = enter_email()
+    CONTACTS.append(contact)
     return f'В записную книжку добавлена запись.\n' \
-           f'Имя: {result["name"]}\n' \
-           f'Дата рождения: {result["birthday"]}\n' \
-           f'Адрес проживания: {result["address"]}\n' \
-           f'Номер телефона: {", ".join(result["phones"])}\n' \
-           f'Email: {result["email"]}\n'
+           f'Имя: {contact["name"]}\n' \
+           f'Дата рождения: {contact["birthday"]}\n' \
+           f'Адрес проживания: {contact["address"]}\n' \
+           f'Номер телефона: {", ".join(contact["phones"])}\n' \
+           f'Email: {contact["email"]}\n'
 
 
 def delete_contact() -> str:
@@ -320,7 +308,7 @@ def change_contact():
             if i_wanna_change == "1":
                 contact["name"] = input("Введите новое имя контакта.\n>>> ")
             elif i_wanna_change == "2":
-                contact["birthday"] = wanna_enter_birthday()
+                contact["birthday"] = enter_birthday()
             elif i_wanna_change == "3":
                 contact["address"] = str(input("Введите новый адресс контакта.\n>>> "))
             elif i_wanna_change == "4":
@@ -344,7 +332,7 @@ def change_contact():
 
                 contact["phones"] = wanna_add_or_change_phone()
             elif i_wanna_change == "5":
-                contact["email"] = wanna_enter_email()
+                contact["email"] = enter_email()
             elif i_wanna_change == "":
                 return "Вы завершили редактирование контакта. Никаких изменений не произошло."
             return f'Изменения успешно сохранены'

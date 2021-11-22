@@ -2,81 +2,75 @@ import re
 from .address_book import load_note
 from pathlib import Path
 
-# Путь к файлу с заметками
-current_dir = Path.cwd()
-FILES = current_dir / 'files'
-FILES.mkdir(exist_ok=True)
-NOTE_FILE = './files/note.json'
-# Заметки
-NOTE = load_note(NOTE_FILE)
+NOTE = []
+
+
+def check_note_name(note_list, new_name_note):
+    """Функция проверка существования заголовка в списке"""
+    for note in note_list:
+        if note['name'] == new_name_note:
+            print("Заметка с таким именем уже существует.")
+            return True
+        else:
+            return False
+
+
+def input_name_note():
+    name_note = input('Введите имя заметки: ')
+    # Проверяем, есть ли заметка с таким заголовком в базе
+    is_exist_name = check_note_name(NOTE, name_note)
+    if is_exist_name:
+        return input_name_note()
+    return name_note
+
+
+def input_tags():
+    new_note_tags = input('Введите один или несколько тегов заметки: ')
+    # Сплитим все заметки в список
+    tags = re.split(r'[ ,]+', new_note_tags)
+    tag_list = ['#' + i for i in tags]
+    return tag_list
+
+
+def input_text_note():
+    new_note_text = input('Введите текст заметки: ')
+    return new_note_text
 
 
 def add_note():
     """Функция создания заметки"""
-    result = 'Ваша заметка успешно сохранена.\n'
-    new_note = input('Введите имя заметки: ')
-    # Проверяем, есть ли заметка с таким заголовком в базе
-    check_note_name(NOTE, new_note)
-    new_note_tags = input('Введите один или несколько тегов заметки: ')
-    # Сплитим все заметки в список
-    tags = re.split(r'[ ,]+', new_note_tags)
-    for tag in tags:
-        tags[tags.index(tag)] = '#' + tag
-    new_note_text = input('Ваша заметка: ')
-    created_note = {'name': new_note, 'tag': tags, 'text': new_note_text}
+
+    name_note = input_name_note()
+    tags_note = input_tags()
+    text_note = input_text_note()
+
+    created_note = {'name': name_note, 'tag': tags_note, 'text': text_note}
     NOTE.append(created_note)
-    for k, v in created_note.items():
-        if not isinstance(v, list):
-            result += f'{k.title()}: {v}\n'
-        else:
-            if len(v) != 1:
-                result += f'{k.title()}: {", ".join(v)}\n'
-            else:
-                result += f'{k.title()}: {v[0]}\n'
-    result += '\n'
-    return result
-
-
-def check_note_name(note_data, input_note_name):
-    """Функция проверка существования заголовка в списке"""
-    for note in note_data:
-        if note['name'] == input_note_name:
-            check1 = str(input(
-                'Заметка с таким именем уже есть. Пожалуйста, уточните, вы хотите отредактировать заметку,'
-                'или создать новую? edit_note/add_note: '))
-            if check1 == 'change_note':
-                # Тут нужно будет вызывать ф-цию изменения заметки, передавая в нее input_note_name
-                pass
-            # Если юзер выбирает создать заметку - перезапускаем ф-цию add_note сначала
-            elif check1 == 'add_note':
-                add_note(NOTE_FILE)
+    print(created_note)
+    return 'Ваша заметка успешно сохранена.\n'
 
 
 def delete_note():
     """Функция удаления заметок по заголовку"""
-    is_found = True
-    note_title = str(input("Введите заголовок заметки для удаления.\n>>> "))
+    note_title = input("Введите заголовок заметки для удаления.\n>>> ")
     for note in NOTE:
         if note_title == note['name']:
-            is_found = False
             index = NOTE.index(note)
             NOTE.pop(index)
-            return print(f"Заметка с заголовком: '{note_title}' успешно удалена.")
-    if is_found:
-        print(f"Заметка c заголовком: '{note_title}', отсутствует.")
+            return f"Заметка с заголовком: '{note_title}' успешно удалена."
+        else:
+            return f"Заметка c заголовком: '{note_title}', отсутствует."
 
 
 def change_note():
     """Функция редактирования заметки"""
-    is_found = True
-    note_name = str(input("Введите заголовок заметки для редактирования.\n>>>  "))
+    note_name = input("Введите заголовок заметки для редактирования.\n>>>  ")
     for note in NOTE:
         if note_name == note['name']:
-            is_found = False
             while True:
-                value_to_change = str(input("Введите имя поля, которое хотите отредактировать:"
-                                            " 'name', 'text' либо 'tag'.\n"
-                                            "Чтобы выйти - просто нажмите 'Enter'.\n>>> ").strip())
+                value_to_change = input("Введите имя поля, которое хотите отредактировать:"
+                                        " 'name', 'text' либо 'tag'.\n"
+                                        "Чтобы выйти - просто нажмите 'Enter'.\n>>> ").strip()
                 if value_to_change.lower() == "":
                     break
                 elif value_to_change.lower() == 'text':
@@ -95,8 +89,8 @@ def change_note():
                 else:
                     return "Вы ввели неверную команду, пожалуйста, попробуйте еще раз."
             return f"Заметка успешно изменена."
-    if is_found:
-        return f"Заметка с заголовком: '{note_name}', отсутствует."
+        else:
+            return f"Заметка с заголовком: '{note_name}', отсутствует."
 
 
 def show_notes() -> str:
@@ -115,30 +109,27 @@ def show_notes() -> str:
             result += '\n'
         return result
     else:
-        result = 'Нет записей в заметках.'
-        return result
+        return 'Нет записей в заметках.'
 
 
 def find_note():
     """Функция поиска заметок по заголовку и тегу"""
     search_value = input('Пожалуйста, введите имя или тег заметки для поиска.\n>>> ')
-    # Счетчик для определения, найден результат запроса, или нет
-    cnt = 0
-    # Проверяем, поиск ведется по тегу или по имени
+
     if search_value.find('#') == 0:
         for note in NOTE:
             if search_value in note['tag']:
-                # упаковываем теги в строку для читабельного отображения
+
                 tags = ', '.join(note['tag'])
                 return f"Заметка: {note['name']}\nТеги: {tags}\nТекст: {note['text']}\n"
-                cnt += 1
-        if cnt == 0:
-            return f'Заметка по тегу {search_value} не найдена.'
+
+            else:
+                return f'Заметка по тегу {search_value} не найдена.'
     else:
         for note in NOTE:
             if search_value == note['name']:
                 tags = ', '.join(note['tag'])
                 return f"Заметка: {note['name']}\nТеги: {tags}\nТекст: {note['text']}\n"
-                cnt += 1
-        if cnt == 0:
-            return f'Заметка c именем: {search_value}, не найдена.'
+
+            else:
+                return f'Заметка c именем: {search_value}, не найдена.'
