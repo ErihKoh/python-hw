@@ -5,6 +5,6 @@ setup(
     version='1',
     description='Script help you working with contacts, notes and help you sort files in folder',
     packages=find_packages(),
-    install_requires=['fuzzywuzzy', 'python-Levenshtein'],
+    install_requires=['fuzzywuzzy', 'python-Levenshtein', 'SQLAlchemy'],
     entry_points={'console_scripts': ['smartbot = smartbot.app:main']}
 )

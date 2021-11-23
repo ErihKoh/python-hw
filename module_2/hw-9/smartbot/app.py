@@ -1,9 +1,10 @@
 import logging
+from fuzzywuzzy import fuzz
 
 from .address_book import add_contact, delete_contact, change_contact, find_contact, show_contacts, show_birthdays, \
     dump_note, CONTACTS
 from .note import add_note, delete_note, change_note, find_note, show_notes, NOTE
-from fuzzywuzzy import fuzz
+
 
 # Config logging
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG, datefmt='%d.%m.%Y %H:%M:%S')

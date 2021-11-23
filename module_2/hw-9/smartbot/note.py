@@ -1,6 +1,5 @@
 import re
 from .address_book import load_note
-from pathlib import Path
 
 NOTE = []
 
@@ -29,7 +28,8 @@ def input_tags():
     # Сплитим все заметки в список
     tags = re.split(r'[ ,]+', new_note_tags)
     tag_list = ['#' + i for i in tags]
-    return tag_list
+    tag_str = ' '.join(tag_list)
+    return tag_str
 
 
 def input_text_note():
@@ -52,7 +52,8 @@ def add_note():
 
 def delete_note():
     """Функция удаления заметок по заголовку"""
-    note_title = input("Введите заголовок заметки для удаления.\n>>> ")
+    note_title = input("Введите заголовок заметки для удаления.\n"
+                       ">>> ")
     for note in NOTE:
         if note_title == note['name']:
             index = NOTE.index(note)
@@ -64,23 +65,28 @@ def delete_note():
 
 def change_note():
     """Функция редактирования заметки"""
-    note_name = input("Введите заголовок заметки для редактирования.\n>>>  ")
+    note_name = input("Введите заголовок заметки для редактирования.\n"
+                      ">>>  ")
     for note in NOTE:
         if note_name == note['name']:
             while True:
                 value_to_change = input("Введите имя поля, которое хотите отредактировать:"
                                         " 'name', 'text' либо 'tag'.\n"
-                                        "Чтобы выйти - просто нажмите 'Enter'.\n>>> ").strip()
+                                        "Чтобы выйти - просто нажмите 'Enter'.\n"
+                                        ">>> ").strip()
                 if value_to_change.lower() == "":
                     break
                 elif value_to_change.lower() == 'text':
-                    note_text = str(input("Enter text.\n>>> "))
+                    note_text = input("Enter text.\n"
+                                      ">>> ")
                     note['text'] = note_text
                 elif value_to_change.lower() == 'name':
-                    note_name = str(input("Enter name.\n>>> "))
+                    note_name = input("Enter name.\n"
+                                      ">>> ")
                     note['name'] = note_name
                 elif value_to_change.lower() == 'tag':
-                    note_tag = str(input("Enter tag.\n>>> "))
+                    note_tag = input("Enter tag.\n"
+                                     ">>> ")
                     tag_list = note['tag']
                     if note_tag in tag_list:
                         tag_list.remove(note_tag)
@@ -114,14 +120,17 @@ def show_notes() -> str:
 
 def find_note():
     """Функция поиска заметок по заголовку и тегу"""
-    search_value = input('Пожалуйста, введите имя или тег заметки для поиска.\n>>> ')
+    search_value = input('Пожалуйста, введите имя или тег заметки для поиска.\n'
+                         '>>> ')
 
     if search_value.find('#') == 0:
         for note in NOTE:
             if search_value in note['tag']:
 
                 tags = ', '.join(note['tag'])
-                return f"Заметка: {note['name']}\nТеги: {tags}\nТекст: {note['text']}\n"
+                return f"Заметка: {note['name']}\n" \
+                       f"Теги: {tags}\n" \
+                       f"Текст: {note['text']}\n"
 
             else:
                 return f'Заметка по тегу {search_value} не найдена.'
@@ -129,7 +138,9 @@ def find_note():
         for note in NOTE:
             if search_value == note['name']:
                 tags = ', '.join(note['tag'])
-                return f"Заметка: {note['name']}\nТеги: {tags}\nТекст: {note['text']}\n"
+                return f"Заметка: {note['name']}\n" \
+                       f"Теги: {tags}\n" \
+                       f"Текст: {note['text']}\n"
 
             else:
                 return f'Заметка c именем: {search_value}, не найдена.'

@@ -30,11 +30,11 @@ def sanitize_phone_number(number_phone):
     # Убирает лишние символы
     new_phone = (
         number_phone.strip()
-            .removeprefix("+")
-            .replace("(", "")
-            .replace(")", "")
-            .replace("-", "")
-            .replace(" ", "")
+                    .removeprefix("+")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("-", "")
+                    .replace(" ", "")
     )
     return new_phone
 
@@ -57,9 +57,11 @@ def check_phone_number(number_phone):
 def input_phone():
     # Дает возможность ввести телефон и проверяет его валидность.
     # Если невалиден - ввод еще раз, Если валиден - возвращает валидный телефон
-    phone = input("Введите телефон.\n>>> ")
+    phone = input("Введите телефон.\n"
+                  ">>> ")
     if not check_phone_number(phone):
-        print("Вы ввели некоректный телефон.\nПопробуйте еще раз ;)")
+        print("Вы ввели некорректный телефон.\n"
+              "Попробуйте еще раз ;)")
         return input_phone()
     else:
         return check_phone_number(phone)
@@ -67,21 +69,22 @@ def input_phone():
 
 def add_other_phones():
     # Возвращает список от одного и более валидных телефонов.
-    # После коректного введения 1 телефона спросит, хочешь ли добавить еще.
+    # После корректного введения 1 телефона спросит, хочешь ли добавить еще.
     # И, если ты уже ввел хотя бы 1 валидный номер, а потом захотел ввести еще, но ввел неправильно или передумал
     # вводить, будет предложено не вводить телефон и двинутся дальше вместо " Ты ввел неправильно, попробуй еще"
     phones_to_add = list()
     phones_to_add.append(input_phone())
     while True:
-        answer = input("Если хотите добавит еще один номер - введите его.\n"
-                       "Если хотите продолжить - нажмите 'Enter'.\n>>> ")
-        if answer == "":
+        other_phone = input("Если хотите добавит еще один номер - введите его.\n"
+                            "Если хотите продолжить - нажмите 'Enter'.\n>>> ")
+        if other_phone == "":
             break
         else:
-            if check_phone_number(answer):
-                phones_to_add.append(check_phone_number(answer))
+            if check_phone_number(other_phone):
+                phones_to_add.append(check_phone_number(other_phone))
             else:
-                print("Вы ввели невалидный телефон.\nПопробуйте еще раз.")
+                print("Вы ввели невалидный телефон.\n"
+                      "Попробуйте еще раз.")
     return phones_to_add
 
 
@@ -90,7 +93,8 @@ def enter_address():
     # Просто дает возможность вводить или не вводить адрес. Проверки нет.
 
     address = input("Введите адрес контакта и нажмите 'Enter'.\n"
-                   "Что бы пропустить - нажмите 'Enter'.\n>>> ")
+                    "Что бы пропустить - нажмите 'Enter'.\n"
+                    ">>> ")
     if address == "":
         return
     else:
@@ -123,14 +127,15 @@ def enter_email():
     # попробовать заново.
 
     email = input("Введите Email человека и нажмите 'Enter'.\n"
-                   "Чтобы пропустить - нажмите 'Enter'.\n>>> ")
+                  "Чтобы пропустить - нажмите 'Enter'.\n>>> ")
     if email == "":
         return None
     else:
         if email_is_correct(email):
             return email_is_correct(email)
         else:
-            print("Вы ввели недействительный email.\nПопробуйте еще раз.")
+            print("Вы ввели недействительный email.\n"
+                  "Попробуйте еще раз.")
             return enter_email()
 
 
@@ -148,9 +153,10 @@ def birthday_is_correct(date):
 def enter_birthday():
     birthday = input(
         "Введите день рождения человека в формате '01.09.1986' и нажмите 'Enter'.\n"
-        "Чтобы пропустить - нажмите 'Enter'.\n>>> ")
+        "Чтобы пропустить - нажмите 'Enter'.\n"
+        ">>> ")
     if birthday == "":
-        return None
+        return
     else:
         if birthday_is_correct(birthday):
             return birthday_is_correct(birthday)
