@@ -1,7 +1,7 @@
 # ФУНКЦИИ ДЛЯ ОБРАБОТКИ ТЕЛЕФОНА
 import re
 from datetime import datetime, timedelta
-from models import Session, Contact
+from .models import Session, Contact
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy import select
 
@@ -127,14 +127,14 @@ def enter_email():
             return enter_email()
 
 
-def birthday_is_correct(date):
-    # ФУНКЦИИ ДЛЯ ОБРАБОТКИ ДАТЫ РОЖДЕНИЯ
-    # 1. Дать возможность вводить или не вводить день рождения
-    # 2. Проверка на соответствие заданному формату даты
-
-    if re.match(r"(([0]{1}[0-9])|([1]{1}[0-2])).(([0 - 2]{1}[0-9]{1})|([3]{1}[0-1])).[0-9]{4}", date):
-        return True
-    return False
+# def birthday_is_correct(date):
+#     # ФУНКЦИИ ДЛЯ ОБРАБОТКИ ДАТЫ РОЖДЕНИЯ
+#     # 1. Дать возможность вводить или не вводить день рождения
+#     # 2. Проверка на соответствие заданному формату даты
+#
+#     if re.match(r"^(?:0[1-9]|1[12])\.(?:[0-2][1-9]|3[01])\.(?:19[2-9]\d|[2-9]\d{3})$", date):
+#         return True
+#     return False
 
 
 def enter_birthday():
@@ -142,15 +142,16 @@ def enter_birthday():
         "Введите день рождения человека в формате 'mm.dd.yyyy' и нажмите 'Enter'.\n"
         "Чтобы пропустить - нажмите 'Enter'.\n"
         ">>> ")
+    # pattern = re.match(r"^(?:[0-2][1-9]|3[01])\.(?:0[1-9]|1[12])\.(?:19[2-9]\d|[2-9]\d{3})$", birthday)
     if birthday == "":
         return
     else:
-        if birthday_is_correct(birthday):
-            return birthday
-        else:
-            print("Вы ввели недействительную дату.\n"
-                  "Попробуйте еще раз.")
-            return enter_birthday()
+        # if pattern:
+        return birthday
+        # else:
+        #     print("Вы ввели недействительную дату.\n"
+        #           "Попробуйте еще раз.")
+        #     return enter_birthday()
 
 
 def insert_to_db(name, phones, email, address, birthday):
@@ -227,7 +228,7 @@ def show_birthdays() -> str:
             if i:
                 if start < i[1].strftime("%d-%m") < end:
                     print(f'{i[0]}: {i[1]}')
-    return f"Запрос успешно выполнен"
+            return f"Запрос успешно выполнен"
 
 
 def find_contact():
@@ -258,6 +259,15 @@ def wanna_change_smth_else():
 # 4. Вызываеться функция изменения данного параметра
 # 5. Спрашиваеться, нужно ли изменить что то еще
 # 6. Если нужно изменить что то еще - начинаеться пунки 3.
+
+
+def wanna_add_or_change_phone():
+    """Вложенная функция изменения телефона контакта"""
+    with Session() as session:
+        statement = select(Contact.name, Contact.phones)
+        result = session.execute(statement).one()
+
+
 def change_contact():
     """Функция изменения контакта"""
     # contact = search_contact()
@@ -265,51 +275,23 @@ def change_contact():
     # печатает поля контакта, и спрашивает, который нужно изменить.
 
     count = 0  # Эта часть кода отображает содержание контакта с нумерацией полей словаря
-    name_for_search = str(input("Введите имя.\n>>> ")).strip()
+    name_for_search = input("Введите имя.\n>>> ").strip()
     for contact in CONTACTS:
         # Проверка на предмет наличия контакта в списке контактов
-        if contact["name"] == name_for_search:
-            # Вывод перечня полей для контакта
-            for key, value in contact.items():
-                count += 1
-                print(f"{count}. {key.title()}: {value}")
-            #  Просьба ввести номер параметра, который нужно изменить, с последующим изменением
-            i_wanna_change = input("\nВведите цифру поля, которое хотите отредактировать и нажмите 'Enter'.\n"
-                                   "Чтобы выйти - просто нажмите 'Enter'.\n>>> ")
-            if i_wanna_change == "1":
-                contact["name"] = input("Введите новое имя контакта.\n>>> ")
-            elif i_wanna_change == "2":
-                contact["birthday"] = enter_birthday()
-            elif i_wanna_change == "3":
-                contact["address"] = str(input("Введите новый адресс контакта.\n>>> "))
-            elif i_wanna_change == "4":
-                def wanna_add_or_change_phone():
-                    """Вложенная функция изменения телефона контакта"""
-                    # Возвращает новый список телеофонов для этого контакта
-                    # Отображение всех телефонов контакта с порядковым номером
-                    count_phone = 0
-                    for phones in contact["phones"]:
-                        count_phone += 1
-                        print(f"{count_phone}. {phones}")
-                    answer = input(
-                        "Если хотите добавить новый телефон - просто введите его,"
-                        "если же хотите изменить существующий - введите его порядковый номер,"
-                        "после чего укажите новый мобильный телефон.\n>>> ")
-                    if len(answer) <= 2:  # проверка что ввел порядковый номер
-                        contact["phones"][int(answer) - 1] = input_phone()  # Заменяет телефон в списке
-                    else:
-                        contact["phones"].append(input_phone)  # если ввел не порядковый номер, то предполагаем, телефо
-                    return contact["phones"]
+        #  Просьба ввести номер параметра, который нужно изменить, с последующим изменением
+        i_wanna_change = input("\nВведите цифру поля, которое хотите отредактировать и нажмите 'Enter'.\n"
+                               "Чтобы выйти - просто нажмите 'Enter'.\n>>> ")
+        if i_wanna_change == "1":
+            contact["name"] = input("Введите новое имя контакта.\n>>> ")
+        elif i_wanna_change == "2":
+            contact["birthday"] = enter_birthday()
+        elif i_wanna_change == "3":
+            contact["address"] = str(input("Введите новый адресс контакта.\n>>> "))
+        elif i_wanna_change == "4":
 
-                contact["phones"] = wanna_add_or_change_phone()
-            elif i_wanna_change == "5":
-                contact["email"] = enter_email()
-            elif i_wanna_change == "":
-                return "Вы завершили редактирование контакта. Никаких изменений не произошло."
-            return f'Изменения успешно сохранены'
-
-
-if __name__ == '__main__':
-    # add_contact()
-    show_birthdays()
-    # print(current_week())
+            contact["phones"] = wanna_add_or_change_phone()
+        elif i_wanna_change == "5":
+            contact["email"] = enter_email()
+        elif i_wanna_change == "":
+            return "Вы завершили редактирование контакта. Никаких изменений не произошло."
+        return f'Изменения успешно сохранены'
