@@ -1,25 +1,13 @@
 # ФУНКЦИИ ДЛЯ ОБРАБОТКИ ТЕЛЕФОНА
 import re
-import json
 from datetime import datetime, timedelta
-from pathlib import Path
+from models import Session, Contact
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy import select
 
-
-def dump_note(path_file, new_data):
-    """Функция записи данных в файл"""
-    with open(path_file, 'w') as fh:
-        json.dump(new_data, fh)
-
-
-def load_note(path_file):
-    """Функция чтения данных из файла"""
-    try:
-        with open(path_file, 'r') as fh:
-            return json.load(fh)
-    except FileNotFoundError:
-        return list()
-    except Exception:
-        return list()
+# def load_note(path_file):
+#     """Функция чтения данных из DB"""
+#
 
 
 # Пусть к файлу с контактами
@@ -30,11 +18,11 @@ def sanitize_phone_number(number_phone):
     # Убирает лишние символы
     new_phone = (
         number_phone.strip()
-                    .removeprefix("+")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("-", "")
-                    .replace(" ", "")
+            .removeprefix("+")
+            .replace("(", "")
+            .replace(")", "")
+            .replace("-", "")
+            .replace(" ", "")
     )
     return new_phone
 
@@ -64,7 +52,7 @@ def input_phone():
               "Попробуйте еще раз ;)")
         return input_phone()
     else:
-        return check_phone_number(phone)
+        return phone
 
 
 def add_other_phones():
@@ -72,20 +60,20 @@ def add_other_phones():
     # После корректного введения 1 телефона спросит, хочешь ли добавить еще.
     # И, если ты уже ввел хотя бы 1 валидный номер, а потом захотел ввести еще, но ввел неправильно или передумал
     # вводить, будет предложено не вводить телефон и двинутся дальше вместо " Ты ввел неправильно, попробуй еще"
-    phones_to_add = list()
-    phones_to_add.append(input_phone())
+    phones_list = list()
+    phone = input_phone()
+    phones_list.append(phone)
     while True:
         other_phone = input("Если хотите добавит еще один номер - введите его.\n"
                             "Если хотите продолжить - нажмите 'Enter'.\n>>> ")
         if other_phone == "":
-            break
+            return phone
         else:
             if check_phone_number(other_phone):
-                phones_to_add.append(check_phone_number(other_phone))
+                phones_list.append(check_phone_number(other_phone))
+                return ', '.join(phones_list)
             else:
-                print("Вы ввели невалидный телефон.\n"
-                      "Попробуйте еще раз.")
-    return phones_to_add
+                return "Вы ввели невалидный телефон.\nПопробуйте еще раз."
 
 
 def enter_address():
@@ -144,145 +132,122 @@ def birthday_is_correct(date):
     # 1. Дать возможность вводить или не вводить день рождения
     # 2. Проверка на соответствие заданному формату даты
 
-    if re.match(r"(([0-2]{1}[0-9]{1})|([3]{1}[0-1])).(([0]{1}[0-9])|([1]{1}[0-2])).[0-9]{4}", date):
-        return date
-    # валидный формат даты: 01.12.1976
+    if re.match(r"(([0]{1}[0-9])|([1]{1}[0-2])).(([0 - 2]{1}[0-9]{1})|([3]{1}[0-1])).[0-9]{4}", date):
+        return True
     return False
 
 
 def enter_birthday():
     birthday = input(
-        "Введите день рождения человека в формате '01.09.1986' и нажмите 'Enter'.\n"
+        "Введите день рождения человека в формате 'mm.dd.yyyy' и нажмите 'Enter'.\n"
         "Чтобы пропустить - нажмите 'Enter'.\n"
         ">>> ")
     if birthday == "":
         return
     else:
         if birthday_is_correct(birthday):
-            return birthday_is_correct(birthday)
+            return birthday
         else:
-            print("Вы ввели недействительную дату.\nПопробуйте еще раз.")
+            print("Вы ввели недействительную дату.\n"
+                  "Попробуйте еще раз.")
             return enter_birthday()
+
+
+def insert_to_db(name, phones, email, address, birthday):
+    """Функция записи данных в DB"""
+    with Session() as session:
+        data_for_db = Contact(name, phones, email, address, birthday)
+        session.add(data_for_db)
+        session.commit()
 
 
 def add_contact() -> str:
     # Собранная функция добавления контакта
-    # Не принимает аргументов, возвращает словарь с проверенными значениями имени, телефона (телефонов),
-    # и по желанию - почта и день рождения
-    contact = dict()
-    contact["name"] = input("Введите имя контакта: ")
-    contact["birthday"] = enter_birthday()
-    contact["address"] = enter_address()
-    contact["phones"] = add_other_phones()
-    contact["email"] = enter_email()
-    CONTACTS.append(contact)
+    name = input("Введите имя контакта: ")
+    birthday = enter_birthday()
+    address = enter_address()
+    phones = add_other_phones()
+    email = enter_email()
+    insert_to_db(name, phones, email, address, birthday)
     return f'В записную книжку добавлена запись.\n' \
-           f'Имя: {contact["name"]}\n' \
-           f'Дата рождения: {contact["birthday"]}\n' \
-           f'Адрес проживания: {contact["address"]}\n' \
-           f'Номер телефона: {", ".join(contact["phones"])}\n' \
-           f'Email: {contact["email"]}\n'
+           f'Имя: {name}\n' \
+           f'Дата рождения: {birthday}\n' \
+           f'Адрес проживания: {address}\n' \
+           f'Номер телефона: {phones}\n' \
+           f'Email: {email}\n'
 
 
 def delete_contact() -> str:
     # Функция удаления контакта
-    contact_name = input("Введите имя контакта для удаления: ")
-    for contact in CONTACTS:
-        if contact_name == contact['name']:
-            CONTACTS.pop(CONTACTS.index(contact))
-            return f"Контакт с именем: {contact_name}, успешно удален"
-        return f'Контакт с именем: {contact_name}, в списке не найден'
+    name = input("Введите имя контакта для удаления: ")
+    session = Session()
+    try:
+        session.query(Contact).filter(Contact.name == name).one()
+        session.query(Contact).filter(Contact.name == name).delete(synchronize_session=False)
+        session.commit()
+        session.close()
+        return f'Контакт с именем: {name}, удален'
+    except NoResultFound:
+        return f'Контакт с именем: {name}, в списке не найден'
 
 
 def show_contacts() -> str:
     # Функция вывода всех контактов
-    result = ''
-    if CONTACTS:
-        for contact in CONTACTS:
-            for k, v in contact.items():
-                if not isinstance(v, list):
-                    result += f'{k.title()}: {v}\n'
-                else:
-                    if len(v) != 1:
-                        result += f'{k.title()}: {", ".join(v)}\n'
-                    else:
-                        result += f'{k.title()}: {v[0]}\n'
-            result += '\n'
-        return result
+    session = Session()
+    statement = select(Contact.name, Contact.phone, Contact.email, Contact.address, Contact.birthday)
+    result = session.execute(statement).all()
+    if result:
+        for i in result:
+            print(
+                f' Имя: {i[0]}\n Дата рождения: {i[4]}\n Адрес проживания: {i[3]}\n Номер телефона: {i[1]}\n Email: {i[2]}\n')
     else:
-        result = 'Нет записанных контактов.'
-        return result
+        return "Список пустой"
+    return "==========================="
 
 
-def close_birthday_users(users, start, end) -> list:
-    # Функция выборки ближайших дней рождения
-    now = datetime.today().date()
-    result = []
-    for user in users:
-        try:
-            birthday = datetime.strptime(user['birthday'], '%d.%m.%Y').date()
-            birthday = birthday.replace(year=now.year)
-        except TypeError:
-            continue
-        if start <= birthday <= end:
-            result.append(user)
-    return result
+def current_week():
+    current_date = datetime.now().date()
+    day_of_week = current_date.weekday()
+
+    to_beginning_of_week = timedelta(days=day_of_week)
+    beginning_of_week = current_date - to_beginning_of_week
+
+    to_end_of_week = timedelta(days=6 - day_of_week)
+    end_of_week = current_date + to_end_of_week
+    return beginning_of_week.strftime("%d-%m"), end_of_week.strftime("%d-%m")
 
 
-def show_birthdays(contacts=CONTACTS) -> str:
+def show_birthdays() -> str:
     # Функция выводы ближайших дней рождения контактов
-    result = ''
-    now = datetime.today().date()
-    current_week_day = now.weekday()
-    if current_week_day >= 5:
-        start_date = now - timedelta(days=(7 - current_week_day))
-    elif current_week_day == 0:
-        start_date = now - timedelta(days=2)
-    else:
-        start_date = now
-    days_ahead = 4 - current_week_day
-    if days_ahead < 0:
-        days_ahead += 7
-    end_date = now + timedelta(days=days_ahead)
-    birthday_users = close_birthday_users(contacts, start=start_date, end=end_date)
-    for birthday in birthday_users:
-        for k, v in birthday.items():
-            if not isinstance(v, list):
-                result += f'{k.title()}: {v}\n'
-            else:
-                if len(v) != 1:
-                    result += f'{k.title()}: {", ".join(v)}\n'
-                else:
-                    result += f'{k.title()}: {v[0]}\n'
-        result += '\n'
-    if not result:
-        return 'В течении текущей рабочей недели среди Ваших контактов именинников нет.'
-    return result
+    start, end = current_week()
+    with Session() as session:
+        statement = select(Contact.name, Contact.birthday)
+        result = session.execute(statement).all()
+        for i in result:
+            if i:
+                if start < i[1].strftime("%d-%m") < end:
+                    print(f'{i[0]}: {i[1]}')
+    return f"Запрос успешно выполнен"
 
 
 def find_contact():
     """Функция поиска контакта по имени"""
     result = ''
     name_for_search = input("Введите имя.\n>>> ")
-    for contact in CONTACTS:
-        if contact["name"] == name_for_search:
-            for k, v in contact.items():
-                if not isinstance(v, list):
-                    result += f'{v}\n'
-                else:
-                    if len(v) != 1:
-                        result += f'{", ".join(v)}\n'
-                    else:
-                        result += f'{v[0]}\n'
-            result += '\n'
-            return result
-    return
+    session = Session()
+    try:
+        session.query(Contact).filter(Contact.name == name_for_search).one()
+        session.commit()
+        session.close()
+        return f'Контакт с именем: {name_for_search}, изменен'
+    except NoResultFound:
+        return f'Контакт с именем: {name_for_search}, в списке не найден'
 
 
 def wanna_change_smth_else():
     """Вложенная функция запроса на измениня каких-либо других полей"""
-    answer = str(input("Изменения внесены. Если Хотите изменить что-то еще - введите любой символ и "
-                       "нажмите 'Enter', чтобы выйти - просто нажмите 'Enter'.\n>>> "))
+    answer = input("Изменения внесены. Если Хотите изменить что-то еще - введите любой символ и "
+                   "нажмите 'Enter', чтобы выйти - просто нажмите 'Enter'.\n>>> ")
     if not answer:
         return 'ok'
     else:
@@ -342,3 +307,9 @@ def change_contact():
             elif i_wanna_change == "":
                 return "Вы завершили редактирование контакта. Никаких изменений не произошло."
             return f'Изменения успешно сохранены'
+
+
+if __name__ == '__main__':
+    # add_contact()
+    show_birthdays()
+    # print(current_week())

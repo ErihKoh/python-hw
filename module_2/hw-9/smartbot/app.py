@@ -1,8 +1,7 @@
 import logging
 from fuzzywuzzy import fuzz
 
-from .address_book import add_contact, delete_contact, change_contact, find_contact, show_contacts, show_birthdays, \
-    dump_note, CONTACTS
+from .address_book import add_contact, delete_contact, change_contact, find_contact, show_contacts, show_birthdays
 from .note import add_note, delete_note, change_note, find_note, show_notes, NOTE
 
 

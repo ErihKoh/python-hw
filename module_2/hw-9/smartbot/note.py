@@ -1,5 +1,5 @@
 import re
-from .address_book import load_note
+# from .address_book import load_note
 
 NOTE = []
 
