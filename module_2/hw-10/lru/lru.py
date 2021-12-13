@@ -1,60 +1,59 @@
+import requests
 import redis
 
-# r.mset('firstname' 'Jack' 'lastname' 'Stuntman' 'age' '35')
-# print(r.keys())
 
-# r.set('1', 5)
-# g = r.get('1')
-# r.set('1', 'abs')
-# g = r.get('1')
-# print(g.decode('utf-8'))
-queue_list = []
+def get_data_from_api(city):
+    url = "https://community-open-weather-map.p.rapidapi.com/weather"
 
+    querystring = {"q": city}
 
-def set_in_redis(elm, client):
-    if elm in queue_list:
-        queue_list.remove(elm)
-        queue_list.insert(0, elm)
-    else:
-        queue_list.insert(0, elm)
+    headers = {
+        'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com",
+        'x-rapidapi-key': "657c063b24msh72cef233e9d263cp108acajsn3ebd15378fc9"
+    }
 
-    if len(queue_list) > 5:
-        queue_list.pop()
+    response = requests.request("GET", url, headers=headers, params=querystring)
 
-    for idx, i in enumerate(queue_list):
-        client.set(idx, i)
-
-    return print(f'{elm} has been added to redisDB')
+    return response.text
 
 
-def get_from_redis(key, client):
-    data = client.get(key).decode('utf-8')
-    queue_list.remove(data)
-    queue_list.insert(0, data)
-
-    for idx, i in enumerate(queue_list):
-        client.set(idx, i)
-
-    return f'key {key}: {data}'
+def get_data_from_cache(data, client):
+    result = client.get(data)
+    return result
 
 
-def get_all_data_from_redis(client):
-    for i in range(5):
-        print(client.get(i).decode('utf-8'))
+def redis_cache_check(data, city, client):
+    info = get_data_from_cache(data, client)
+
+    if info:
+        info_decode = info.decode('utf-8')
+        return f'Data from cache\n' \
+               f'{info_decode}'
+
+    client.set(city, info)
+
+    return f'Data from API\n' \
+           f'{info}'
+
+
+# def main(city, client):
+#     data_from_api = get_data_from_api(city)
+#     data_from_cache = get_data_from_cache(data_from_api, client)
+#     print(get_data_from_cache(data_from_api, client))
+    # print(data_from_cache.keys)
+    # if data_from_cache:
+    #     info_decode = data_from_cache.decode('utf-8')
+    #     return print(f'Data from cache\n'
+    #                  f'{info_decode}')
+    #
+    # client.set(city, data_from_api)
+    #
+    # return print(f'Data from API\n'
+    #              f'{data_from_api}')
 
 
 if __name__ == '__main__':
     redis_client = redis.StrictRedis(host='localhost', port='6381', db=0)
 
-    set_in_redis('a', redis_client)
-    set_in_redis('b', redis_client)
-    set_in_redis('c', redis_client)
-    set_in_redis('d', redis_client)
-    set_in_redis('e', redis_client)
-    set_in_redis('f', redis_client)
-    set_in_redis('h', redis_client)
-    set_in_redis('hello', redis_client)
-
-    print(get_all_data_from_redis(redis_client))
-    print(get_from_redis('3', redis_client))
-    print(get_all_data_from_redis(redis_client))
+    print(get_data_from_cache('London', redis_client))
+    print(redis_client.keys())
