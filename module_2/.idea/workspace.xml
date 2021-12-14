@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1c97042-1a00-4f43-aee5-0b6bfa8d7191" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/hw-10/lru/lru2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/hw-10/lru/lru.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-10/lru/lru.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
