@@ -1,10 +1,10 @@
 from flask import render_template, flash, url_for, redirect, request
-from assistant_app import db, mail
+from ..app import db, mail
 from flask_login import login_required, current_user
-from assistant_app.contacts.forms import ContactForm
-from assistant_app.models import Contact
+from .forms import ContactForm
+from ..models import Contact
 from werkzeug.exceptions import abort
-from assistant_app.contacts import contact_bp
+from .app import contact_bp
 from flask_mail import Message
 
 
@@ -29,7 +29,7 @@ def index():
     return render_template('index.html', title='home page', form=form, contacts=contacts)
 
 
-@contact_bp.route('/index/<int:contact_id>', methods=['GET', 'POST'])
+@contact_bp.route('/index/<int:contact_id>')
 @login_required
 def contact(contact_id):
     contact = Contact.query.get_or_404(contact_id)
@@ -60,11 +60,11 @@ def update_contact(contact_id):
         db.session.commit()
         flash('Your contact has been update', 'success')
         return redirect(url_for('contacts.contact', contact_id=contact.id))
-    elif request.method == "GET":
-        form.name.data = contact.name
-        form.phone.data = contact.phone
-        form.address.data = contact.address
-        form.email.data = contact.email
+    form.name.data = contact.name
+    form.phone.data = contact.phone
+    form.address.data = contact.address
+    form.email.data = contact.email
+
     return render_template('index.html', form=form)
 
 

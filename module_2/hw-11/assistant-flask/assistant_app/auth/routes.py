@@ -1,9 +1,9 @@
 from flask import render_template, flash, url_for, redirect, request
-from assistant_app import db
+from ..app import db
 from flask_login import login_user, current_user, logout_user
-from assistant_app.auth.forms import LoginForm, RegistrationForm
-from assistant_app.models import User
-from assistant_app.auth import auth_bp
+from .forms import LoginForm, RegistrationForm
+from ..models import User
+from .app import auth_bp
 
 
 @auth_bp.route('/login', methods=['GET', 'Post'])

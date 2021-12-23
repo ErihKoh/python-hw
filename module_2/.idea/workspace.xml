@@ -2,26 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1c97042-1a00-4f43-aee5-0b6bfa8d7191" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/assistant.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/templates/about.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/templates/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/templates/contact.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/templates/email.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/templates/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/templates/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/assistant.db" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/assistant.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/auth/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
