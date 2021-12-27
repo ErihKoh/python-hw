@@ -36,7 +36,7 @@ def contact(contact_id):
     return render_template('contact.html', contact=contact)
 
 
-@contact_bp.route('/index/<int:contact_id>/delete', methods=['GET', 'POST'])
+@contact_bp.route('/index/<int:contact_id>/delete')
 @login_required
 def delete_contact(contact_id):
     contact = Contact.query.get_or_404(contact_id)
