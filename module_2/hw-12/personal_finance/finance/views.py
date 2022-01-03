@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import CreateView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.text import slugify
 import json
 from .models import Project, Category, Expense
-from .forms import ExpenseForm
+from .forms import ExpenseForm, FilterForm
 
 
 def project_list(request):
@@ -19,7 +21,6 @@ def project_detail(request, project_slug):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            print(form.errors)
             title = form.cleaned_data['title']
             amount = form.cleaned_data['amount']
             category_name = form.cleaned_data['category']
