@@ -3,7 +3,7 @@
   <form action="" method="POST">
     {% csrf_token %} {{ form.as_p }}
     <label for="categoryInput">
-      Expense Categories (hit enter after every category)
+      Expense Categories (press enter after every category)
     </label>
     <input type="text" name="categoryInput" id="categoryInput" />
     <input type="hidden" name="categoriesString" />

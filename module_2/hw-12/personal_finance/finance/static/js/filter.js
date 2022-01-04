@@ -10,7 +10,7 @@ let instance2 = M.FormSelect.init(elem2);
 let elem1 = document.querySelector("#expenseFilter");
 let instance1 = M.Modal.init(elem1);
 
-let today = new Date();
+// date
 
 function formatDate(date) {
   var d = new Date(date),
@@ -24,7 +24,8 @@ function formatDate(date) {
   return [year, month, day].join("-");
 }
 
+let today = new Date();
 let nowDay = formatDate(today);
-console.log(nowDay);
 
 document.querySelector("#end").setAttribute("max", nowDay);
+document.querySelector("#dateExpense").setAttribute("max", nowDay);

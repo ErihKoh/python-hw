@@ -4,6 +4,7 @@ from django import forms
 class ExpenseForm(forms.Form):
     title = forms.CharField()
     amount = forms.IntegerField()
+    dateExpense = forms.DateField()
     category = forms.CharField()
 
 

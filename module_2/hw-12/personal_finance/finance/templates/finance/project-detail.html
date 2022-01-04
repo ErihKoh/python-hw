@@ -1,4 +1,8 @@
 {% extends 'finance/base.html' %} {% block content %}
+<a class="" href="/">
+  <i class="large material-icons green-text left">chevron_left</i>
+</a>
+
 <div class="container">
   <section class="section section-stats">
     <div class="row">
@@ -73,7 +77,7 @@
               <span class="title">{{ expense.category.name }}</span>
             </div>
             <div class="col s3">
-              <span class="title">31.12.2021</span>
+              <span class="title">{{expense.dateExpense}}</span>
             </div>
 
             <a
@@ -102,6 +106,16 @@
       <label for="amount"> Amount </label>
       <input name="amount" id="amount" />
 
+      <label for="dateExpense">Date expense:</label>
+      <input
+        type="date"
+        id="dateExpense"
+        name="dateExpense"
+        value=""
+        min="2018-01-01"
+        max=""
+      />
+
       <select name="category">
         {% for category in category_list %}
         <option>{{category.name}}</option>
@@ -123,18 +137,14 @@
         name="start"
         value=""
         min="2018-01-01"
-        max="2021-12-31"
+        max=""
       />
       <label for="end">End date:</label>
-      <input
-        type="date"
-        id="end"
-        name="end"
-        value=""
-        min="2018-01-01"
-        max="2021-12-31"
-      />
-      <button type="submit" class="btn">Setup</button>
+      <input type="date" id="end" name="end" value="" min="2018-01-01" max="" />
+      <button class="btn waves-effect waves-light" type="submit" name="action">
+        Submit
+        <i class="material-icons right">send</i>
+      </button>
     </form>
   </div>
 </div>

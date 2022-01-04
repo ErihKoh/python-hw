@@ -1,5 +1,11 @@
 from django.db import models
 from django.utils.text import slugify
+from datetime import datetime
+
+
+def _default_date():
+        current_date = datetime.now()
+        return current_date.date() 
 
 
 class Project(models.Model):
@@ -33,5 +39,9 @@ class Expense(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="expenses")
     title = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
+    dateExpense = models.DateField(
+        default=_default_date,
+        verbose_name="Created timestamp",
+    )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

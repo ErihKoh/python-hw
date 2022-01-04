@@ -11,6 +11,7 @@ from .forms import ExpenseForm, FilterForm
 
 def project_list(request):
     project_list = Project.objects.all()
+      
     if request.method == 'DELETE':
         id = json.loads(request.body)['id']
        
@@ -35,6 +36,7 @@ def project_detail(request, project_slug):
                 
                 title = form.cleaned_data['title']
                 amount = form.cleaned_data['amount']
+                dateExpense = form.cleaned_data['dateExpense']
                 category_name = form.cleaned_data['category']
 
                 category = get_object_or_404(Category, project=project, name=category_name)
@@ -43,13 +45,14 @@ def project_detail(request, project_slug):
                     project=project,
                     title=title,
                     amount=amount,
+                    dateExpense=dateExpense,
                     category=category
                 ).save()
             
         if form1.is_valid():
             start = form1.cleaned_data['start']
             end = form1.cleaned_data['end']
-            print(start, end)
+            print(type(start), end)
         
 
 

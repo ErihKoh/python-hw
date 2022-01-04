@@ -15,6 +15,7 @@
         <h5>{{ project.name }}</h5>
         <a href="{% url 'detail' project.slug %}" class="btn">Open</a>
         <a
+          style="cursor: pointer"
           class="delete-icon"
           onclick="deleteProject(this)"
           data-id="{{project.id}}"
