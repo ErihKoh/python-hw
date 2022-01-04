@@ -13,7 +13,7 @@ let instance1 = M.Modal.init(elem1);
 // date
 
 function formatDate(date) {
-  var d = new Date(date),
+  let d = new Date(date),
     month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),
     year = d.getFullYear();
@@ -26,6 +26,11 @@ function formatDate(date) {
 
 let today = new Date();
 let nowDay = formatDate(today);
+let startDate = document.querySelector("#start");
+let endDate = document.querySelector("#end");
+let expenseDate = document.querySelector("#dateExpense");
 
-document.querySelector("#end").setAttribute("max", nowDay);
-document.querySelector("#dateExpense").setAttribute("max", nowDay);
+expenseDate.setAttribute("max", nowDay);
+endDate.setAttribute("max", nowDay);
+startDate.setAttribute("max", nowDay);
+endDay.setAttribute("value", nowDay);

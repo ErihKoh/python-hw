@@ -25,12 +25,15 @@ def project_list(request):
 def project_detail(request, project_slug):
     project = get_object_or_404(Project, slug=project_slug)
 
-    print(project)
+    dates = []
+
+    isFilter = False
 
     form1 = FilterForm(request.POST)
     form = ExpenseForm(request.POST)
 
     if request.method == 'POST':
+
 
         if form.is_valid():
                 
@@ -52,15 +55,19 @@ def project_detail(request, project_slug):
         if form1.is_valid():
             start = form1.cleaned_data['start']
             end = form1.cleaned_data['end']
-            print(type(start), end)
-        
 
+            dates.append(start)
+            dates.append(end)
+            isFilter = True 
 
     elif request.method == 'GET':
         category_list = Category.objects.filter(project=project)
+        
+        visible_projects = project.expenses.filter(dateExpense__gte=dates[0]).filter(dateExpense__lte=dates[1]) if isFilter else project.expenses.all()
+
         return render(request, 'finance/project-detail.html',
-                      {'project': project, 'expense_list': project.expenses.all(),
-                       'category_list': category_list})
+                        {'project': project, 'expense_list': visible_projects,
+                        'category_list': category_list})                               
 
     elif request.method == 'DELETE':
         id = json.loads(request.body)['id']
