@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1c97042-1a00-4f43-aee5-0b6bfa8d7191" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/module_2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/module_2.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/assistant.db" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/assistant.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/hw-11/assistant-flask/assistant_app/contacts/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

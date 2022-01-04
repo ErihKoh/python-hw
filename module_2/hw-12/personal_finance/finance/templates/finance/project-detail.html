@@ -111,40 +111,35 @@
     </form>
   </div>
 </div>
-<div id="expenseFilter" class="modal" >
+<div id="expenseFilter" class="modal">
   <div class="modal-content">
     <h4>Filter</h4>
     <form method="post">
       {% csrf_token %}
-      <input type="text" class="datepicker">
-<!--      <label for="start">Start date:</label>-->
-<!--      <input type="date" id="start" name="start"-->
-<!--             value="01.01.2021"-->
-<!--             min="2018-01-01" max="2021-12-31">-->
-
-<!--<label for="end">End date:</label>-->
-<!--<input type="date" id="end" name="end"-->
-<!--       min="2018-01-01" max="2021-12-31">-->
-<button type="submit" class="btn">Setup</button>
+      <label for="start">Start date:</label>
+      <input
+        type="date"
+        id="start"
+        name="start"
+        value=""
+        min="2018-01-01"
+        max="2021-12-31"
+      />
+      <label for="end">End date:</label>
+      <input
+        type="date"
+        id="end"
+        name="end"
+        value=""
+        min="2018-01-01"
+        max="2021-12-31"
+      />
+      <button type="submit" class="btn">Setup</button>
     </form>
   </div>
 </div>
+<script src="../../static/js/filter.js"></script>
 <script>
-
-<!--Add expense Modal-->
-  let elem = document.querySelector(".modal");
-  let instance = M.Modal.init(elem);
-
-  let elem2 = document.querySelector("select");
-  let instance2 = M.FormSelect.init(elem2);
-
-<!--Add expanse filter-->
-
-  let elem1 = document.querySelector("#expenseFilter");
-  let instance1 = M.Modal.init(elem1);
-
-
-
   function deleteExpense(e) {
     let id = e.dataset.id;
     e.closest("li").remove();
@@ -161,5 +156,4 @@
     });
   }
 </script>
-
 {% endblock %}

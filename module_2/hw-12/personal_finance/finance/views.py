@@ -11,6 +11,12 @@ from .forms import ExpenseForm, FilterForm
 
 def project_list(request):
     project_list = Project.objects.all()
+    if request.method == 'DELETE':
+        id = json.loads(request.body)['id']
+       
+        project = get_object_or_404(Project, id=id)
+        project.delete()
+        return HttpResponse('')
 
     return render(request, 'finance/project-list.html', {'project_list': project_list})
 
@@ -18,21 +24,35 @@ def project_list(request):
 def project_detail(request, project_slug):
     project = get_object_or_404(Project, slug=project_slug)
 
+    print(project)
+
+    form1 = FilterForm(request.POST)
+    form = ExpenseForm(request.POST)
+
     if request.method == 'POST':
-        form = ExpenseForm(request.POST)
+
         if form.is_valid():
-            title = form.cleaned_data['title']
-            amount = form.cleaned_data['amount']
-            category_name = form.cleaned_data['category']
+                
+                title = form.cleaned_data['title']
+                amount = form.cleaned_data['amount']
+                category_name = form.cleaned_data['category']
 
-            category = get_object_or_404(Category, project=project, name=category_name)
+                category = get_object_or_404(Category, project=project, name=category_name)
 
-            Expense.objects.create(
-                project=project,
-                title=title,
-                amount=amount,
-                category=category
-            ).save()
+                Expense.objects.create(
+                    project=project,
+                    title=title,
+                    amount=amount,
+                    category=category
+                ).save()
+            
+        if form1.is_valid():
+            start = form1.cleaned_data['start']
+            end = form1.cleaned_data['end']
+            print(start, end)
+        
+
+
     elif request.method == 'GET':
         category_list = Category.objects.filter(project=project)
         return render(request, 'finance/project-detail.html',

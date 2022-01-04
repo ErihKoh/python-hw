@@ -8,5 +8,5 @@ class ExpenseForm(forms.Form):
 
 
 class FilterForm(forms.Form):
-    start = forms.CharField()
+    start = forms.DateField()
     end = forms.DateField()
