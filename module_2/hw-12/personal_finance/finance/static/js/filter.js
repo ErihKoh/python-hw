@@ -33,5 +33,4 @@ let expenseDate = document.querySelector("#dateExpense");
 expenseDate.setAttribute("max", nowDay);
 endDate.setAttribute("max", nowDay);
 startDate.setAttribute("max", nowDay);
-console.log(startDate.value);
 expenseDate.setAttribute("value", nowDay);

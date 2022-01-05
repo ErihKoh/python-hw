@@ -141,6 +141,22 @@
       />
       <label for="end">End date:</label>
       <input type="date" id="end" name="end" value="" min="2018-01-01" max="" />
+
+      <div>
+        {% for category in category_list %}
+        <p>
+          <label>
+            <input
+              type="checkbox"
+              name="categories"
+              values="{{category.name}}"
+            />
+            <span> {{category.name}}</span>
+          </label>
+        </p>
+        {% endfor %}
+      </div>
+
       <button class="btn waves-effect waves-light" type="submit" name="action">
         Submit
         <i class="material-icons right">send</i>

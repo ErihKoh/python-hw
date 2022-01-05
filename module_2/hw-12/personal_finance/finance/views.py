@@ -37,6 +37,9 @@ def project_detail(request, project_slug):
 
     if request.method == 'POST':
 
+        # categories = request.POST.getlist('categories')
+        print(form1)
+
 
         if form.is_valid():
                 
