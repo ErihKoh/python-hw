@@ -8,26 +8,29 @@ import json
 from .models import Project, Category, Expense
 from .forms import ExpenseForm, FilterForm
 
+dates = []
+
+
+def _delete_method(request, _cls):
+    id = json.loads(request.body)['id']
+    obj_del = get_object_or_404(_cls, id=id)
+    obj_del.delete()
+    return HttpResponse('')
+   
+        
 
 def project_list(request):
     project_list = Project.objects.all()
       
     if request.method == 'DELETE':
-        id = json.loads(request.body)['id']
-       
-        project = get_object_or_404(Project, id=id)
-        project.delete()
-        return HttpResponse('')
+
+        _delete_method(request, Project)
 
     return render(request, 'finance/project-list.html', {'project_list': project_list})
 
 
 def project_detail(request, project_slug):
     project = get_object_or_404(Project, slug=project_slug)
-
-    dates = []
-
-    isFilter = False
 
     form1 = FilterForm(request.POST)
     form = ExpenseForm(request.POST)
@@ -51,29 +54,28 @@ def project_detail(request, project_slug):
                     dateExpense=dateExpense,
                     category=category
                 ).save()
+                
             
         if form1.is_valid():
             start = form1.cleaned_data['start']
             end = form1.cleaned_data['end']
 
+            dates.clear()
+
             dates.append(start)
             dates.append(end)
-            isFilter = True 
 
     elif request.method == 'GET':
         category_list = Category.objects.filter(project=project)
         
-        visible_projects = project.expenses.filter(dateExpense__gte=dates[0]).filter(dateExpense__lte=dates[1]) if isFilter else project.expenses.all()
-
+        visible_projects = project.expenses.filter(dateExpense__gte=dates[0]).filter(dateExpense__lte=dates[1]) if dates else project.expenses.all()
+        dates.clear()
         return render(request, 'finance/project-detail.html',
                         {'project': project, 'expense_list': visible_projects,
                         'category_list': category_list})                               
 
     elif request.method == 'DELETE':
-        id = json.loads(request.body)['id']
-        expense = get_object_or_404(Expense, id=id)
-        expense.delete()
-        return HttpResponse('')
+        _delete_method(request, Expense)
 
     return HttpResponseRedirect(project_slug)
 
