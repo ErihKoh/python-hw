@@ -37,9 +37,6 @@ def project_detail(request, project_slug):
 
     if request.method == 'POST':
 
-        # categories = request.POST.getlist('categories')
-        print(form1)
-
 
         if form.is_valid():
                 
@@ -62,6 +59,8 @@ def project_detail(request, project_slug):
         if form1.is_valid():
             start = form1.cleaned_data['start']
             end = form1.cleaned_data['end']
+            # categories = form1.cleaned_data['categories']
+            # print(categories)
 
             dates.clear()
 
