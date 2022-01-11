@@ -125,61 +125,73 @@
     </form>
   </div>
 </div>
-<div id="expenseFilter" class="modal">
-  <div class="modal-content">
-    <h4>Filter</h4>
-    <form method="post">
-      {% csrf_token %}
-      <label for="start">Start date:</label>
-      <input
-        type="date"
-        id="start"
-        name="start"
-        value=""
-        min="2018-01-01"
-        max=""
-      />
-      <label for="end">End date:</label>
-      <input type="date" id="end" name="end" value="" min="2018-01-01" max="" />
+  <div id="expenseFilter" class="modal">
+    <div class="modal-content">
+      <h4>Filter</h4>
+      <form method="post">
+        {% csrf_token %}
+        <label for="start">Start date:</label>
+        <input
+          type="date"
+          id="start"
+          name="start"
+          value=""
+          min="2018-01-01"
+          max=""
+        />
+        <label for="end">End date:</label>
+        <input
+          type="date"
+          id="end"
+          name="end"
+          value=""
+          min="2018-01-01"
+          max=""
+        />
 
-      <div>
-        {% for category in category_list %}
-        <p>
-          <label>
-            <input
-              type="checkbox"
-              name="categories"
-              values="{{category.name}}"
-            />
-            <span> {{category.name}}</span>
-          </label>
-        </p>
-        {% endfor %}
-      </div>
+        <div>
+          {% for category in category_list %}
+          <p>
+            <label>
+              <input
+                type="checkbox"
+                name="categories"
+                values="{{category.name}}"
+              />
+              <span> {{category.name}}</span>
+            </label>
+          </p>
+          {% endfor %}
+        </div>
 
-      <button class="btn waves-effect waves-light" type="submit" name="action">
-        Submit
-        <i class="material-icons right">send</i>
-      </button>
-    </form>
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+          name="action"
+        >
+          Submit
+          <i class="material-icons right">send</i>
+        </button>
+      </form>
+    </div>
   </div>
-</div>
-<script src="../../static/js/filter.js"></script>
-<script>
-  function deleteExpense(e) {
-    let id = e.dataset.id;
-    e.closest("li").remove();
+  <script src="../../static/js/filter.js"></script>
+  <script>
+    function deleteExpense(e) {
+      let id = e.dataset.id;
+      e.closest("li").remove();
 
-    fetch("", {
-      method: "DELETE",
-      headers: {
-        "X-CSRFToken": "{{csrf_token}}",
-      },
-      body: JSON.stringify({
-        id: id,
-      }),
-      credentials: "same-origin",
-    });
-  }
-</script>
-{% endblock %}
+      fetch("", {
+        method: "DELETE",
+        headers: {
+          "X-CSRFToken": "{{csrf_token}}",
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+        credentials: "same-origin",
+      });
+    }
+  </script>
+  {% endblock %}
+</div>

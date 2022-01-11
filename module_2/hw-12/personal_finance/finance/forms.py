@@ -11,4 +11,4 @@ class ExpenseForm(forms.Form):
 class FilterForm(forms.Form):
     start = forms.DateField()
     end = forms.DateField()
-    categories = forms.CheckboxSelectMultiple()
+    # categories = forms.CheckboxSelectMultiple()
