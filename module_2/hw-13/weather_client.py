@@ -11,7 +11,8 @@ async def fetch_to_meteoprog():
             result = BeautifulSoup(text, "lxml").find('div', class_="today-temperature").text.replace(' ', '') \
                 .replace('\n', '').replace('C', '')
 
-            print(result)
+            # print(result)
+            return result
 
 
 async def fetch_to_meteo():
@@ -21,14 +22,17 @@ async def fetch_to_meteo():
             result = BeautifulSoup(text, "lxml").find('div', class_="weather-detail__main-degree").text\
                 .replace(' ', '')
 
-            print(result)
+            # print(result)
+            return result
 
 
 async def main():
     sites = asyncio.gather(fetch_to_meteoprog(), fetch_to_meteo())
-    await sites
+    return await sites
 
 
-if __name__ == "__main__":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    asyncio.run(main())
+asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+responses = asyncio.run(main())
+
+
+
