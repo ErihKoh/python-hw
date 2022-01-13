@@ -5,7 +5,7 @@ from aiohttp import web
 from weather_client import responses
 
 
-async def greet_user(request: web.Request) -> web.Response:
+async def get_temp(request: web.Request) -> web.Response:
 
     context = {
         'temp1': responses[0],
@@ -18,6 +18,8 @@ async def greet_user(request: web.Request) -> web.Response:
 
 if __name__ == "__main__":
 
+    # run on http://127.0.0.1:8080/
+
     app = web.Application()
 
     # setup jinja2
@@ -26,6 +28,6 @@ if __name__ == "__main__":
                              'templates'
                          ))
 
-    app.router.add_get('/', greet_user)
+    app.router.add_get('/', get_temp)
 
     web.run_app(app)
