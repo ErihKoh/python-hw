@@ -15,14 +15,11 @@ async def fetch_to_meteoprog():
             current_temp = result.find('div', class_="today-temperature").text
             desc = result.find('h3').text
 
-            hhhh = result.findAll('th')
-            # print(hhhh)
-            dddd = result.findAll('td')
-            # print(dddd)
+            param = result.findAll('th')
 
+            param_value = result.findAll('td')
 
-
-            return hhhh, dddd
+            return param, param_value, head_1, head_2, current_temp, desc
 
 
 async def fetch_to_meteo():
