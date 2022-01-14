@@ -8,29 +8,35 @@ async def fetch_to_meteoprog():
     async with aiohttp.ClientSession() as session:
         async with session.get(METEOPROG_URL) as response:
             text = await response.read()
-            result = BeautifulSoup(text, 'html.parser').find('section',
-                                                             class_="today-block white-icons block-weather-bg-day_cloud")
+            result = BeautifulSoup(text, 'lxml').find('section',
+                                                      class_="today-block")
+
             head_1 = result.find('h1').text
             head_2 = result.find('h2').text
             current_temp = result.find('div', class_="today-temperature").text
             desc = result.find('h3').text
 
-            param = result.findAll('th')
+            params = result.findAll('th')
 
-            param_value = result.findAll('td')
+            params_value = result.findAll('td')
 
-            return param, param_value, head_1, head_2, current_temp, desc
+            return params, params_value, head_1, head_2, current_temp, desc
 
 
 async def fetch_to_meteo():
+
     async with aiohttp.ClientSession() as session:
         async with session.get(METEO_URL) as response:
             text = await response.read()
-            result = BeautifulSoup(text, "lxml").find('div', class_="weather-detail__main-degree").text \
-                .replace(' ', '')
+            result = BeautifulSoup(text, "lxml").find('div', class_="weather-detail__main")
+            head_1 = 'Погода в Миколаєві на сьогодні'
+            head_2 = result.find('div', class_="weather-detail__main-title").text.replace('\n', '')
+            current_temp = result.find('div', class_="weather-detail__main-temp").text
+            desc = result.find('div', class_="weather-detail__main-specification").text
+            params = result.findAll('div', class_="weather-detail__extra-caption")
+            params_value = result.findAll('div', class_="weather-detail__extra-data")
 
-            # print(result)
-            return result
+            return head_1, head_2, current_temp, desc, params, params_value
 
 
 async def main():

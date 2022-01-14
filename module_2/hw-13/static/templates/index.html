@@ -12,7 +12,12 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../../static/css/style.css" />
+    <link
+      href="../css/style.css"
+      media="all"
+      rel="stylesheet"
+      type="text/css"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
@@ -21,10 +26,11 @@
   </head>
   <body>
     <div class="container">
-      <h3>{{head_1}}</h3>
-      <h4>{{head_2}}</h4>
-      <h5>{{cur_temp}}</h5>
-      <p>{{desc_weather}}</p>
+      <h3 class="blue-text text-darken-2">MeteoProg</h3>
+            <h4>{{head_1}}</h4>
+            <h5>{{head_2}}</h5>
+            <h6>{{cur_temp}}</h6>
+            <p>{{desc_weather}}</p>
       <div class="row">
         <div class="col s3">
           {% for h in param %}
@@ -36,7 +42,23 @@
           <p>{{h.text}}</p>
           {% endfor %}
         </div>
-      </div>
+
+      <h3 class="blue-text text-darken-2">Meteo</h3>
+      <h4>{{head_1_2}}</h4>
+      <h5>{{head_2_2}}</h5>
+      <h6>{{cur_temp_2}}</h6>
+      <p>{{desc_weather_2}}</p>
+      <div class="row">
+        <div class="col s3">
+          {% for h in param_2 %}
+          <p>{{h.text}}:</p>
+          {% endfor %}
+        </div>
+        <div class="col s3">
+          {% for h in param_val_2 %}
+          <p>{{h.text}}</p>
+          {% endfor %}
+        </div>
     </div>
   </body>
 </html>

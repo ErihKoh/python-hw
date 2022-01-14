@@ -5,6 +5,7 @@ from aiohttp import web
 from weather_client import meteoprog_response, meteo_response
 
 
+
 async def get_temp(request: web.Request) -> web.Response:
 
     context = {
@@ -14,7 +15,12 @@ async def get_temp(request: web.Request) -> web.Response:
         'desc_weather': meteoprog_response[5],
         'param': meteoprog_response[0],
         'param_val': meteoprog_response[1],
-        # 'temp2': meteo_response
+        'head_1_2': meteo_response[0],
+        'head_2_2': meteo_response[1],
+        'cur_temp_2': meteo_response[2],
+        'desc_weather_2': meteo_response[3],
+        'param_2': meteo_response[4],
+        'param_val_2': meteo_response[5],
     }
     response = aiohttp_jinja2.render_template("index.html", request,
                                           context=context)
@@ -28,11 +34,13 @@ if __name__ == "__main__":
     app = web.Application()
 
     # setup jinja2
+
     aiohttp_jinja2.setup(app,
                          loader=jinja2.FileSystemLoader(
-                             'templates'
+                             'static/templates'
                          ))
 
     app.router.add_get('/', get_temp)
+    app.router.add_static('/', 'static/', name="static", follow_symlinks=True)
 
     web.run_app(app)
