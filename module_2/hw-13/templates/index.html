@@ -7,9 +7,17 @@
             <h1>Weather in Mykolaiv</h1>
         </div>
 
-        <div>
-            <p>Meteoprog: {{temp1}}</p>
-            <p>Meteo {{ temp2 }}. </p>
+        <div style="display-flex: row">
+            <div>
+            {% for h in temp1 %}
+            <p>{{h.text}}: </p>
+            {% endfor %}
+        </div>
+    <div>
+            {% for h in ttt %}
+            <p>{{h.text}}: </p>
+            {% endfor %}
+        </div>
         </div>
     </body>
 </html>
