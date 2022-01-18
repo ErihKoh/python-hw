@@ -17,9 +17,9 @@ class QetInfoQuotesSpider(scrapy.Spider):
         for quote in response.xpath("/html//div[@class='quote']"):
             item = QuotesSpiderItem()
 
-            item["keyword_name"] = quote.xpath("div[@class='tags']/a/text()").getall(),
-            item["author_name"] = quote.xpath("span/small/text()").get(),
-            item["quote_text"] = replace_quotes(quote.xpath("span[@class='text']/text()").get()),
+            item["keyword_name"] = quote.xpath("div[@class='tags']/a/text()").getall()
+            item["author_name"] = quote.xpath("span/small/text()").get()
+            item["quote_text"] = replace_quotes(quote.xpath("span[@class='text']/text()").get())
             item["author_url"] = "https://quotes.toscrape.com/" + response.xpath("//span/a/@href").get()
             yield item
 

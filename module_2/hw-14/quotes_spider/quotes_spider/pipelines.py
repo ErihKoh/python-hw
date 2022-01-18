@@ -15,7 +15,6 @@ class QuotesSpiderPipeline:
     def process_item(self, item, spider):
         author = Author(author_name=item["author_name"], author_url=item["author_url"])
         quote = Quote(item["quote_text"])
-        print(item['author_name'], '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=')
 
         # exist_author = self.session.query(Author).filter_by(author_name=author.author_name).first()
         # print(exist_author)
@@ -39,7 +38,6 @@ class QuotesSpiderPipeline:
             # self.session.add(keyword)
             self.session.commit()
         except Exception as err:
-            print(err, '===================================================================================')
             self.session.rollback()
         finally:
             self.session.close()
