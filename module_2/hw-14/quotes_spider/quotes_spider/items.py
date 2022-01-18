@@ -7,6 +7,7 @@ import scrapy
 
 
 class QuotesSpiderItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    keyword_name = scrapy.Field()
+    author_name = scrapy.Field()
+    quote_text = scrapy.Field()
+    author_url = scrapy.Field()
