@@ -9,38 +9,47 @@ class QuotesSpiderPipeline:
         create_table(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
-        # self.authors = set()
+        self.authors = set()
         # self.keywords = set()
 
     def process_item(self, item, spider):
-        author = Author(author_name=item["author_name"], author_url=item["author_url"])
-        quote = Quote(item["quote_text"])
 
-        # exist_author = self.session.query(Author).filter_by(author_name=author.author_name).first()
-        # print(exist_author)
+        isExist = item["author_name"]
+        if isExist not in self.authors:
+            author = Author(author_name=item["author_name"], author_url=item["author_url"])
+            self.session.add(author)
+            self.authors.add(item["author_name"])
+        # if exist_author:
+        #
+        # exist_author = self.session.query(Author).filter(Author.author_name == author.author_name).first()
+
+
+        # quote = Quote(item["quote_text"])
+
         # if exist_author:
         #     quote.author = exist_author
         # else:
         #     quote.author = author
         #
-        if "keywords" in item:
-            for keyword_name in item["keywords"]:
-                keyword = Keyword(name=keyword_name)
-                exist_keyword = self.session.query(Keyword).filter_by(name=keyword.name).first()
-                if exist_keyword is not None:  # the current tag exists
-                    keyword = exist_keyword
-
-                quote.keywords.append(keyword)
+        # if "keywords" in item:
+        #     for keyword_name in item["keywords"]:
+        #         keyword = Keyword(name=keyword_name)
+        #         exist_keyword = self.session.query(Keyword).filter_by(name=keyword.name).first()
+        #         if exist_keyword is not None:  # the current tag exists
+        #             keyword = exist_keyword
+        #
+        #         quote.keywords.append(keyword)
 
         try:
             # self.session.add(quote)
-            self.session.add(author)
+
             # self.session.add(keyword)
             self.session.commit()
         except Exception as err:
             self.session.rollback()
         finally:
             self.session.close()
+            print(self.authors)
 
         return item
 

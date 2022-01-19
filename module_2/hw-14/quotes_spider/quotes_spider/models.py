@@ -28,7 +28,7 @@ class Author(Base):
     id = Column(Integer, primary_key=True)
     author_name = Column(String)
     author_url = Column(String)
-    quotes = relationship('Quote', backref='author')
+    # quotes = relationship('Quote', backref='author')
 
     def __init__(self, author_name, author_url):
         self.author_name = author_name
@@ -55,7 +55,7 @@ class Quote(Base):
     __tablename__ = "quote"
     id = Column(Integer, primary_key=True)
     quote_text = Column(String)
-    author_id = Column(Integer, ForeignKey('author.id'))
+    author = Column(String, ForeignKey('author.author_name'))
     keywords = relationship("Keyword", secondary=keywords_quotes_association)
 
     def __init__(self, quote_text):
