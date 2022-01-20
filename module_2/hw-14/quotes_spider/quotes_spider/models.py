@@ -17,9 +17,9 @@ def create_table(engine):
     Base.metadata.bind = engine
 
 
-keywords_quotes_association = Table('keyword_quote', Base.metadata,
-                                    Column('keyword_id', Integer, ForeignKey('keyword.id')),
-                                    Column('quote_id', Integer, ForeignKey('quote.id'))
+keywords_quotes_association = Table('quote_keyword', Base.metadata,
+                                    Column('quote_id', Integer, ForeignKey('quote.id')),
+                                    Column('keyword_id', Integer, ForeignKey('keyword.id'))
                                     )
 
 
@@ -42,13 +42,14 @@ class Keyword(Base):
     __tablename__ = "keyword"
     id = Column(Integer, primary_key=True)
     keyword_name = Column('keyword_name', String(30), unique=True)
-    quotes = relationship("Quote", secondary=keywords_quotes_association)
+    quotes = relationship('Quote', secondary='quote_keyword',
+                          lazy='dynamic', backref="keyword")
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, keyword_name):
+        self.keyword_name = keyword_name
 
     def __repr__(self):
-        return f'{self.name}'
+        return f'{self.keyword_name}'
 
 
 class Quote(Base):
@@ -56,10 +57,11 @@ class Quote(Base):
     id = Column(Integer, primary_key=True)
     quote_text = Column(String)
     author = Column(String, ForeignKey('author.author_name'))
-    keywords = relationship("Keyword", secondary=keywords_quotes_association)
+    keywords = relationship("Keyword", secondary='quote_keyword', lazy='dynamic', backref="quote")
 
-    def __init__(self, quote_text):
+    def __init__(self, quote_text, author):
         self.quote_text = quote_text
+        self.author = author
 
     def __repr__(self):
         return f'{self.quote_text}'

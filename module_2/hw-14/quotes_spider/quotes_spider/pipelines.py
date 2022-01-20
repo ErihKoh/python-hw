@@ -1,6 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
 from quotes_spider.models import Author, Quote, Keyword, db_connect, create_table
+from quotes_spider.items import QuotesSpiderItem
 
 
 class QuotesSpiderPipeline:
@@ -10,59 +11,38 @@ class QuotesSpiderPipeline:
         Session = sessionmaker(bind=engine)
         self.session = Session()
         self.authors = set()
-        # self.keywords = set()
+        self.keywords = set()
 
     def process_item(self, item, spider):
 
-        isExist = item["author_name"]
-        if isExist not in self.authors:
-            author = Author(author_name=item["author_name"], author_url=item["author_url"])
-            self.session.add(author)
-            self.authors.add(item["author_name"])
-        # if exist_author:
-        #
-        # exist_author = self.session.query(Author).filter(Author.author_name == author.author_name).first()
+        if isinstance(item, QuotesSpiderItem):
+            isExist_author = item["author_name"]
+            if isExist_author not in self.authors:
+                author = Author(author_name=item["author_name"], author_url=item["author_url"])
+                self.session.add(author)
+                self.authors.add(item["author_name"])
 
+            quote = Quote(item["quote_text"], item["author_name"])
+            self.session.add(quote)
 
-        # quote = Quote(item["quote_text"])
+            if "keyword_name" in item:
+                for keyword_name in item["keyword_name"]:
+                    keyword = Keyword(keyword_name=keyword_name)
+                    exist_keyword = self.session.query(Keyword).filter_by(keyword_name=keyword.keyword_name).first()
+                    if exist_keyword is not None:
+                        keyword = exist_keyword
+                        self.session.add(keyword)
 
-        # if exist_author:
-        #     quote.author = exist_author
-        # else:
-        #     quote.author = author
-        #
-        # if "keywords" in item:
-        #     for keyword_name in item["keywords"]:
-        #         keyword = Keyword(name=keyword_name)
-        #         exist_keyword = self.session.query(Keyword).filter_by(name=keyword.name).first()
-        #         if exist_keyword is not None:  # the current tag exists
-        #             keyword = exist_keyword
-        #
-        #         quote.keywords.append(keyword)
+                    quote.keywords.append(keyword)
+            return item
 
+    def close_spider(self, spider):
         try:
-            # self.session.add(quote)
-
-            # self.session.add(keyword)
             self.session.commit()
-        except Exception as err:
+        except:
             self.session.rollback()
         finally:
             self.session.close()
-            print(self.authors)
-
-        return item
-
-    # def close_spider(self, spider):
-    #     try:
-    #         self.session.add(quote)
-    #         self.session.add(author)
-    #         self.session.add(keyword)
-    #         self.session.commit()
-    #     except:
-    #         self.session.rollback()
-    #     finally:
-    #         self.session.close()
 
 
 class DuplicatesPipeline(object):
